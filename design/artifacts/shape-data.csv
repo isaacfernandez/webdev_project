@@ -1,0 +1,72 @@
+Id,Name,Shape Library,Page ID,Contained By,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1,Text Area 2,Text Area 3,Text Area 4,Text Area 5,Text Area 6
+1,Page,,,,,,,,Page 1,,,,,
+2,Class,UML,1,,,,,,Person (User Roles),,,,,
+3,Class,UML,1,,,,,,Admin,,"+EditUser(userid)
++DeleteUser(userid)
++EditFeed(feedid)
++DeleteFeed(feedid)
++EditPost(postid)
++DeletePost(postid)",,,
+4,Class,UML,1,,,,,,User,"+id: int
++username:string
++password:string
++dateOfBirth:datetime
++firstName:string
++lastName:string
++UserFollows
++FeedFollows
+",,,,
+5,Entity,Entity Relationship,1,,,,,,Feed,id,feedName,posts,feedFollows,
+6,Entity,Entity Relationship,1,,,,,,Post,id,postTitle,postLink,postingUser,feed
+7,Entity,Entity Relationship,1,,,,,,FeedFollow,id,feedId,followerId,followingSince,
+8,Entity,Entity Relationship,1,,,,,,UserFollow,id,followerId,followedId,followingSince,
+9,Class,UML,1,,,,,,Creator,,"+CreateFeed(feedName)
++PostToFeed(feedId,,post)",,,
+10,Class,UML,1,,,,,,Reader,,"+ReadFeed(feedId)
++ReadUserPosts(userId)
++ReadPost(postId)",,,
+11,Class,UML,1,,,,,,Follower,,"+FollowUser(userId)
++FollowFeed(feedId)",,,
+12,Class,UML,1,,,,,,Domain Objects,,,,,
+13,Class,UML,1,,,,,,User,,,,,
+14,Class,UML,1,,,,,,Feed,,,,,
+15,Class,UML,1,,,,,,Post,,,,,
+16,Class,UML,1,,,,,,FeedFollow,,,,,
+17,Class,UML,1,,,,,,UserFollow,,,,,
+18,Class,UML,1,,,,,,Reader,,,,,
+19,Class,UML,1,,,,,,Follower,,,,,
+20,Class,UML,1,,,,,,Creator,,,,,
+21,Text,Default,1,,,,,,Reads,,,,,
+22,Text,Default,1,,,,,,Is a,,,,,
+23,Text,Default,1,,,,,,Is a,,,,,
+24,Text,Default,1,,,,,,Is a,,,,,
+25,Text,Default,1,,,,,,Creates,,,,,
+26,Text,Default,1,,,,,,Creates,,,,,
+27,Text,Default,1,,,,,,Contains,,,,,
+28,Text,Default,1,,,,,,Creates,,,,,
+29,Text,Default,1,,,,,,Creates,,,,,
+30,Class,UML,1,,,,,,Anonymous,,,,,
+31,Line,,1,,10,2,None,Arrow,,,,,,
+32,Line,,1,,9,2,None,Arrow,,,,,,
+33,Line,,1,,11,2,None,Arrow,,,,,,
+34,Line,,1,,3,10,None,Arrow,,,,,,
+35,Line,,1,,4,10,None,Arrow,,,,,,
+36,Line,,1,,4,9,None,Arrow,,,,,,
+37,Line,,1,,4,11,None,Arrow,,,,,,
+38,Line,,1,,5,12,None,Arrow,,,,,,
+39,Line,,1,,8,12,None,Arrow,,,,,,
+40,Line,,1,,6,12,None,Arrow,,,,,,
+41,Line,,1,,7,12,None,Arrow,,,,,,
+42,Line,,1,,3,9,None,Arrow,,,,,,
+43,Line,,1,,18,13,None,Arrow,,,,,,
+44,Line,,1,,20,13,None,Arrow,,,,,,
+45,Line,,1,,19,14,Hollow Arrow,Hollow Arrow,,,,,,
+46,Line,,1,,18,15,None,Hollow Arrow,,,,,,
+47,Line,,1,,19,13,None,Hollow Arrow,,,,,,
+48,Line,,1,,19,20,Hollow Arrow,Hollow Arrow,,,,,,
+49,Line,,1,,16,45,None,None,,,,,,
+50,Line,,1,,48,17,None,None,,,,,,
+51,Line,,1,,14,15,None,Arrow,,,,,,
+52,Line,,1,,20,14,None,Arrow,,,,,,
+53,Line,,1,,20,15,None,Arrow,,,,,,
+54,Line,,1,,30,10,None,Arrow,,,,,,
