@@ -27,6 +27,6 @@ app.use(session({
 const newsFeedService = require('./services/new-feed.service.server');
 newsFeedService(app);
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
 
 
