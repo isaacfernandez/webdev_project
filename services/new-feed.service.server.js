@@ -2,6 +2,8 @@
 var reqs = require('request-promise');
 var request = require('request');
 
+var apiKey = process.env.NEWS_API_KEY;
+
 var newsApi = 'https://newsapi.org/v2/top-headlines?sources=google-news&apiKey=7dd275983bdb4bbea426b022d69d76f3';
 
 module.exports = app => {
