@@ -9,7 +9,7 @@ module.exports = function (app) {
   app.post('/api/register', register);
   app.get('/api/login/loggedIn', loggedIn);
   app.put('/api/user', updateUser); // just add more endpoints meh
-  app.delete('/api/profile', deleteUser);
+  app.delete('/api/user/:userId', deleteUser);
 
   var userModel = require('../models/user/user.model.server');
 
@@ -97,7 +97,7 @@ module.exports = function (app) {
   }
 
   function deleteUser(req, res) {
-    userModel.deleteUserById(req.session['currentUser']._id)
+    userModel.deleteUserById(req.params['userId'])
       .then(function(response) {
         res.send(response);
       })
