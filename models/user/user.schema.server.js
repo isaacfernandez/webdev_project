@@ -17,8 +17,12 @@ module.exports = mongoose.Schema({
   feedFollows: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'feed-follow'
+  }],
+  posts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'post'
   }]
-}, {collection: 'post'});
+}, {collection: 'user'});
 
 
 
