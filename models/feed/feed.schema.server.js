@@ -3,7 +3,11 @@ var mongoose = require('mongoose');
 
 module.exports = mongoose.Schema({
   feedName: String,
-  posts: [
+  submittedPosts: [
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'post'
+  }],
+  externalPosts: [
     type: mongoose.Schema.Types.ObjectId,
     ref: 'post'
   }],
