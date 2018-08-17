@@ -5,7 +5,7 @@ module.exports = mongoose.Schema({
   username: String,
   password: String,
   firstName: String,
-  lastName: String
+  lastName: String,
   dateOfBirth: {
     type: Date,
     default: Date.now
