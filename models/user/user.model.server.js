@@ -31,6 +31,18 @@ function updateUser(user, idToUpdate) {
   return model.update({_id: idToUpdate}, {$set: user});
 }
 
+function addUserFollow(userId, userFollowId) {
+  return model.update({_id: userId}, {$push: {userFollows: userFollowId}});
+}
+
+function addFeedFollow(userId, feedFollowId) {
+  return model.update({_id: userId}, {$push: {feedFollows: feedFollowId}});
+}
+
+function addPost(userId, postId) {
+  return mode.update({_id: userId}, {$push: {posts: post}});
+}
+
 module.exports = {
   findUserByCredentials: findUserByCredentials,
   findUserByUsername: findUserByUsername,
@@ -38,5 +50,8 @@ module.exports = {
   createUser: createUser,
   findAllUsers: findAllUsers,
   deleteUserById: deleteUserById,
-  updateUser: updateUser
+  updateUser: updateUser,
+  addUserFollow: addUserFollow,
+  addFeedFollow: addFeedFollow,
+  addPost: addPost
 };
