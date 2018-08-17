@@ -5,7 +5,7 @@ module.exports = function(app) {
   app.put('/api/post/:postId', updatePost);
   app.delete('/api/post/:postId', deletePost);
 
-  postModel = require('../models/post/post.model.server');
+  var postModel = require('../models/post/post.model.server');
 
   // postTitle, postLink, postingUser (id), feed (id)
   // must be logged in
