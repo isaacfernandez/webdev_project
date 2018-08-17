@@ -48,7 +48,8 @@ module.exports = function(app) {
           res.json({'response': true});
         } else {
           res.json({'response': false});
-        });
+        }
+      });
   }
 
   function deleteFeedFollow(req, res) {
