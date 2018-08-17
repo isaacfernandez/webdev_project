@@ -27,6 +27,14 @@ function findAllFeeds() {
   return model.find();
 }
 
+function getInternalPosts(feedId, quantity) {
+  return model.findById(feedId).populate('internalPosts').externalPosts.limit(quantity);
+}
+
+function getExternalPosts(feedId, quantity) {
+  return model.findById(feedId).populate('externalPosts').externalPosts.limit(quantity);
+}
+
 
 module.exports = {
   createFeed: createFeed,
