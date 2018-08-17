@@ -6,7 +6,7 @@ module.exports = function(app) {
   app.get('/api/user/:userId/feed-follows/:quantity', getFeedsFollowing);
   app.get('/api/feed/:feedId/isFollowing/:followerId', isUserFollowingFeed);
   app.delete('/api/feed/:feedId/follows/:userId', deleteFeedFollow);
-  app.delete('/api/feed/:feedFollowId', deleteFeedFollowById);
+  app.delete('/api/feed-follow/:feedFollowId', deleteFeedFollowById);
 
   var feedFollowModel = require('../models/feed-follow/feed-follow.model.server');
 
