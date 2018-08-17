@@ -9,7 +9,7 @@ module.exports = mongoose.Schema({
   dateOfBirth: {
     type: Date,
     default: Date.now
-  }
+  },
   userFollows: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user-follow'
