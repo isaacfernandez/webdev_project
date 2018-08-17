@@ -42,6 +42,8 @@ module.exports = {
   deleteFeedById: deleteFeedById,
   findFeedByName: findFeedByName,
   findFeedById: findFeedById,
-  findAllFeeds: findAllFeeds
+  findAllFeeds: findAllFeeds,
+  getInternalPosts: getInternalPosts,
+  getExternalPosts: getExternalPosts
 };
 
