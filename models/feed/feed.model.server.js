@@ -35,6 +35,18 @@ function getExternalPosts(feedId, quantity) {
   return model.findById(feedId).populate('externalPosts').externalPosts.limit(quantity);
 }
 
+function addInternalPost(feedId, postId) {
+  return model.update({_id: feedId}, {$push: {internalPosts: postId}});
+}
+
+function addExternalPost(feedId, postId) {
+  return model.update({_id: feedId}, {$push: {externalPosts: postId}});
+}
+
+function addFeedFollow(feedId, followId) {
+  return model.update({_id: feedId}, {$push: {feedFollows: followId}});
+}
+
 
 module.exports = {
   createFeed: createFeed,
