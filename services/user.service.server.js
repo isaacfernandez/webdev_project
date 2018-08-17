@@ -61,7 +61,6 @@ module.exports = function (app) {
 
   function register(req, res) {
     var keep_going;
-    console.log(req.body);
     userModel.findUserByUsername(req.body['username'])
       .then(function(response) {
         keep_going = response === null;
