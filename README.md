@@ -7,103 +7,67 @@ Project Prototype: This can be a basic listing and detailing (No fancy User inte
 
 # Current APIs:
 
-app.post('/api/feed/:feedId/follows/:userId', userFollowFeed);
+ * post('/api/feed/:feedId/follows/:userId', userFollowFeed)
 
+ * get('/api/feed/:feedId/follows/:quantity', getFeedFollowers)
 
-app.get('/api/feed/:feedId/follows/:quantity', getFeedFollowers);
+ * get('/api/user/:userId/feed-follows/:quantity', getFeedsFollowing)
 
+ * get('/api/feed/:feedId/isFollowing/:followerId', isUserFollowingFeed)
 
-app.get('/api/user/:userId/feed-follows/:quantity', getFeedsFollowing);
+ * delete('/api/feed/:feedId/follows/:userId', deleteFeedFollow)
 
+ * delete('/api/feed-follow/:feedFollowId', deleteFeedFollowById)
 
-app.get('/api/feed/:feedId/isFollowing/:followerId', isUserFollowingFeed);
+ * get('/api/user', findAllUsers)
 
+ * get('/api/user/id/:userId', findUserById)
 
-app.delete('/api/feed/:feedId/follows/:userId', deleteFeedFollow);
+ * get('/api/user/name/:username', findUserByUsername)
 
+ * get('/api/profile', profile)
 
-app.delete('/api/feed/:feedFollowId', deleteFeedFollowById);
+ * post('/api/logout', logout)
 
+ * post('/api/login', login)
 
-app.get('/api/feed/:quantity', getFeeds);
+ * post('/api/register', register)
 
+ * get('/api/login/loggedIn', loggedIn)
 
-app.post('/api/feed', createFeed);
+ * put('/api/user', updateUser); // just add more endpoints m)
 
+ * delete('/api/user/:userId', deleteUser)
 
-app.delete('/api/feed/:feedId', deleteFeed);
+ * post('/api/user/:userId/follows/:followedId', followUser)
 
+ * get('/api/user/:userId/follows/:quantity', getFollows)
 
-app.put('/api/feed/:feedId', updateFeed);
+ * get('/api/user/:userId/follower/:quantity', getFollowers)
 
+ * get('/api/user/:userId/isFollowing/:followingId', isFollowing)
 
-app.get('/api/feed/:feedId/external/:quantity', getExternalPosts);
+ * delete('/api/user/:userId/follows/:followedId', unfollowUser)
 
+ * delete('/api/user-follow/:userFollowId', unfollowUserById)
 
-app.get('/api/feed/:feedId/internal/:quantity', getInternalPosts);
+ * post('/api/post/:feedId', postToFeed)
 
+ * put('/api/post/:postId', updatePost)
 
-app.get('/api/feed/search/:string', searchForFeeds);
+ * delete('/api/post/:postId', deletePost)
 
+ * get('/api/feed/:quantity', getFeeds)
 
-app.get('/api/news', getAllWhatAmIDoingNews);
+ * post('/api/feed', createFeed)
 
+ * delete('/api/feed/:feedId', deleteFeed)
 
-app.post('/api/post/:feedId', postToFeed);
+ * put('/api/feed/:feedId', updateFeed)
 
+ * get('/api/feed/:feedId/external/:quantity', getExternalPosts)
 
-app.put('/api/post/:postId', updatePost);
+ * get('/api/feed/:feedId/internal/:quantity', getInternalPosts)
 
-
-app.delete('/api/post/:postId', deletePost);
-
-
-app.post('/api/user/:userId/follows/:followedId', followUser);
-
-
-app.get('/api/user/:userId/follows/:quantity', getFollows);
-
-
-app.get('/api/user/:userId/follower/:quantity', getFollowers);
-
-
-app.get('/api/user/:userId/isFollowing/:followingId', isFollowing);
-
-
-app.delete('/api/user/:userId/follows/:followedId', unfollowUser);
-
-
-app.get('/api/user', findAllUsers);
-
-
-app.get('/api/user/id/:userId', findUserById);
-
-
-app.get('/api/user/name/:username', findUserByUsername);
-
-
-app.get('/api/profile', profile);
-
-
-app.post('/api/logout', logout);
-
-
-app.post('/api/login', login);
-
-
-app.post('/api/register', register);
-
-
-app.get('/api/login/loggedIn', loggedIn);
-
-
-app.put('/api/user', updateUser);
-
-// just add more endpoints meh
-app.delete('/api/user/:userId', deleteUser);
-
-
-
-
-
+ * get('/api/feed/search/:string', searchForFeeds)
 
