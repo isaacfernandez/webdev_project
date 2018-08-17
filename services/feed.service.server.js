@@ -11,7 +11,7 @@ module.exports = function(app) {
   app.get('/api/feed/:feedId/internal/:quantity', getInternalPosts);
   app.get('/api/feed/search/:string', searchForFeeds);
 
-  var feedModel = require('../models/user/feed.model.server');
+  var feedModel = require('../models/feed/feed.model.server');
 
 
   function getFeeds(req, res) {
