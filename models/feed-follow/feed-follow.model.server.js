@@ -15,8 +15,16 @@ function deleteFeedFollowById(idToDelete) {
   return model.remove({_id: idToDelete});
 }
 
+function deleteFeedFollowByFeedAndFollower(feedId, followerId) {
+  return model.remove({follower: followerId, feed: feedId});
+}
+
 function findFeedFollowById(idToFind) {
   return model.findById(idToFind);
+}
+
+function findFeedFollowByFeedAndFollower(feedId, followerId) {
+  return model.find({follower: followerId, feed: feedId});
 }
 
 function findFeedFollowsForFeed(feedId) {
@@ -36,6 +44,8 @@ module.exports = {
   createFeedFollow: createFeedFollow,
   updateFeedFollow: updateFeedFollow,
   deleteFeedFollowById: deleteFeedFollowById,
+  deleteFeedFollowByFeedAndFollower: deleteFeedFollowByFeedAndFollower,
+  findFeedFollowByFeedAndFollower: findFeedFollowByFeedAndFollower,
   findFeedFollowById: findFeedFollowById,
   findFeedFollowsForFeed: findFeedFollowsForFeed,
   findFeedFollowsOfFollower: findFeedFollowsOfFollower,
