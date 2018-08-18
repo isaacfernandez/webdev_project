@@ -82,6 +82,15 @@ module.exports = function(app) {
                   .then((response) => {
                     console.log('response');
                     console.log(response);
+                    console.log(articles[ind].title);console.log(articles[ind].url;console.log(feedObj._id);
+                    /*if (response === null) {
+                      postModel.createPost({
+                        postTitle: articles[ind].title,
+                        postLink: articles[ind].url,
+                        feed: feedObj._id
+                      }).then(function(response) {
+                        console.log(response);
+                      });*/
                   });
               }
             });
