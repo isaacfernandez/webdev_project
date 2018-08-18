@@ -66,7 +66,7 @@ module.exports = function(app) {
       });
   }
 
-  function getExternalPostsTmp(req, res) {
+  function getExternalPosts(req, res) {
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       feedModel.findFeedByName(req.params['feedName'])
         .then((feedObj) => {
@@ -98,7 +98,7 @@ module.exports = function(app) {
   }
 
 
-  function getExternalPosts(req, res) {
+  function getExternalPostsOld(req, res) {
     console.log('getExternalPosts');
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       // if this particular feedName doesn't exist yet, create it

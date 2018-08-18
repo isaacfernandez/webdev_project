@@ -4,6 +4,8 @@ var model = mongoose.model('PostModel', schema);
 
 
 function createPost(newPost) {
+  console.log('in createPost');
+  console.log(newPost);
   return model.create(newPost);
 }
 
