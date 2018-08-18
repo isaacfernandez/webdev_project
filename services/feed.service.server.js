@@ -79,7 +79,7 @@ module.exports = function(app) {
               articles.forEach(function(article) {
                 console.log('article');
                 console.log(article);
-                postModel.findPostsByTitle(article.title)
+                postModel.findPostsByTitle(article['title'])
                   .then((response) => {
                     if (response === []) {
                       console.log('createPost');
@@ -90,6 +90,8 @@ module.exports = function(app) {
                       }).then(function(response) {
                         console.log(response);
                       });
+                    } else {
+                      console.log('post already exists');
                     }
                   });
                 });
