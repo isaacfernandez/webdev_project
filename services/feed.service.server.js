@@ -92,6 +92,7 @@ module.exports = function(app) {
                       }).then(function(response) {
                         console.log(response);
                       });
+                    }
                   });
               }
             });
