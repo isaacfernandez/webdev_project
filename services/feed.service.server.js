@@ -82,6 +82,8 @@ module.exports = function(app) {
         }).then(() => {
           // one of the existing external feeds
           feedModel.findFeedByName(req.params['feedName']).then((feedObj) => {
+            console.log('in second');
+            console.log(feedObj);
             fetch(queryURL + req.params['feedName'])
               .then((response) => response.json())
               .then(function(articles) {
