@@ -91,7 +91,7 @@ module.exports = function(app) {
                         feed: feedObj._id
                       }).then(function(response) {
                         console.log(response);
-                      });*/
+                      });
                   });
               }
             });
