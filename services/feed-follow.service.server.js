@@ -9,6 +9,7 @@ module.exports = function(app) {
   app.delete('/api/feed-follow/:feedFollowId', deleteFeedFollowById);
 
   var feedFollowModel = require('../models/feed-follow/feed-follow.model.server');
+  var userModel = require('../models/user/user.model.server');
 
   function userFollowFeed(req, res) {
     var newFollow = {
@@ -17,6 +18,7 @@ module.exports = function(app) {
     }
     feedFollowModel.createFeedFollow(newFollow)
       .then(function(feedFollow) {
+        userModel.addFeedFollow(req.params['userId'], feedFollow._id);
         res.send(feedFollow);
       });
   }
