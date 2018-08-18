@@ -39,6 +39,10 @@ function addFeedFollow(userId, feedFollowId) {
   return model.update({_id: userId}, {$push: {feedFollows: feedFollowId}});
 }
 
+function removeFeedFollowById(userId, feedFollowId) {
+  return model.update({_id: userId}, {$pull: {feedFollows: feedFollowId}});
+}
+
 function addPost(userId, postId) {
   return model.update({_id: userId}, {$push: {posts: post}});
 }
@@ -53,5 +57,6 @@ module.exports = {
   updateUser: updateUser,
   addUserFollow: addUserFollow,
   addFeedFollow: addFeedFollow,
+  removeFeedFollowById: removeFeedFollowById,
   addPost: addPost
 };

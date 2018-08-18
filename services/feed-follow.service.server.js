@@ -55,6 +55,12 @@ module.exports = function(app) {
   }
 
   function deleteFeedFollow(req, res) {
+    feedFollowModel.findFeedFollowByFeedAndFollow(
+      req.params['feedId'],
+      req.params['followerId'])
+      .then(function(feedFollow) {
+        userModel.removeFeedFollowById(feedFollow.follower, feedFollow._id)
+      });
     feedFollowModel.deleteFeedFollowByFeedAndFollower(
       req.params['feedId'],
       req.params['followerId'])
@@ -64,6 +70,12 @@ module.exports = function(app) {
   }
 
   function deleteFeedFollowById(req, res) {
+    feedFollowModel.findFeedFollowById(req.params['feedFollowId'])
+      .then(function(feedFollow) {
+        userModel.removeFeedFollowById(
+          feedFollow.follower,
+          req.params['feedFollowId'])
+      });
     feedFollowModel.deleteFeedFollowById(req.params['feedFollowId'])
       .then(function(response) {
         res.send(response);
