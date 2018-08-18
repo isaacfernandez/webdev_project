@@ -67,12 +67,18 @@ module.exports = function(app) {
   }
 
   function getExternalPosts(req, res) {
+    console.log('getExternalPosts\nreq:');
+    console.log(req);
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       // if this particular feedName doesn't exist yet, create it
       feedModel.findFeedByName(req.params['feedName'])
         .then(function(potentialArticle) {
+          console.log('potentialArticle');
+          console.log(potentialArticle);
           if (potentialArticle === null) {
+            console.log('creating feed');
             feedModel.createFeed({'feedName': req.params['feedName']})
+            console.log('created feed');
           }
         }).then(() => {
           // one of the existing external feeds
@@ -82,6 +88,8 @@ module.exports = function(app) {
               .then(function(articles) {
                 for (var art = 0; art < articles.length; articles++) {
                   // determine if title already exists, if not then add
+                  console.log('article');
+                  console.log(art);
                   postModel.findPostByTitle(art.title)
                     .then(function(maybeFound) {
                       console.log('in getExternalPosts');
