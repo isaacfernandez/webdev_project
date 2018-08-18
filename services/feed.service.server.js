@@ -76,27 +76,24 @@ module.exports = function(app) {
             .then((response) => response.json())
             .then(function(arts) {
               articles = arts.articles;
-              for (var ind = 0; ind < articles.length; ind++) {
-                postModel.findPostsByTitle(articles[ind].title)
+              articles.forEach(function(article) {
+                postModel.findPostsByTitle(article.title)
                   .then((response) => {
-                    console.log('response');
-                    console.log(response);
-                    if (response === null) {
+                    if (response === []) {
                       postModel.createPost({
-                        postTitle: articles[ind]['title'],
-                        postLink: articles[ind]['url'],
+                        postTitle: article['title'],
+                        postLink: article['url'],
                         feed: feedObj._id
                       }).then(function(response) {
                         console.log(response);
                       });
                     }
                   });
-              }
+                });
             });
         });
     }
   }
-
 
   function getExternalPostsOld(req, res) {
     console.log('getExternalPosts');
