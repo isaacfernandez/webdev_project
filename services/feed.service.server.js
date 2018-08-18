@@ -67,8 +67,7 @@ module.exports = function(app) {
   }
 
   function getExternalPosts(req, res) {
-    console.log('getExternalPosts\nreq:');
-    console.log(req);
+    console.log('getExternalPosts');
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       // if this particular feedName doesn't exist yet, create it
       feedModel.findFeedByName(req.params['feedName'])
