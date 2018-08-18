@@ -81,7 +81,7 @@ module.exports = function(app) {
                 console.log(article);
                 postModel.findPostsByTitle(article['title'])
                   .then((response) => {
-                    if (response === []) {
+                    if (response == []) { // on purpose comparison
                       console.log('createPost');
                       postModel.createPost({
                         postTitle: article['title'],
