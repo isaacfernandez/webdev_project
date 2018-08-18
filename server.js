@@ -21,7 +21,7 @@ app.use(session({
 }));
 
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost');
 
 require('./services/post.service.server')(app);
 require('./services/feed.service.server')(app);
