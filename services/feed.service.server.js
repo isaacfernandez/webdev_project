@@ -69,7 +69,6 @@ module.exports = function(app) {
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       // if this particular feedName doesn't exist yet, create it
       feedModel.findFeedByName(req.params['feedName'])
-        .then((response) => response.json())
         .then(function(potentialArticle) {
           if (potentialArticle === null) {
             feedModel.createFeed({'feedName': req.params['feedName']})
