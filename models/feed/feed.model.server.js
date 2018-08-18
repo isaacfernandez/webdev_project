@@ -28,11 +28,11 @@ function findAllFeeds() {
 }
 
 function getInternalPosts(feedId, quantity) {
-  return model.findById(feedId).populate('internalPosts').externalPosts.limit(quantity);
+  return model.findById(feedId).populate('internalPosts');//.externalPosts.limit(quantity);
 }
 
 function getExternalPosts(feedName, quantity) {
-  return model.find({_id: feedName}).populate('externalPosts').externalPosts.limit(quantity);
+  return model.find({_id: feedName}).populate('externalPosts');//.externalPosts.limit(quantity);
 }
 
 function addInternalPost(feedId, postId) {
