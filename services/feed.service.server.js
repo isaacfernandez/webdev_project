@@ -66,7 +66,7 @@ module.exports = function(app) {
       });
   }
 
-  function getExternalPosts(req, res) {
+  function getExternalPostsOld(req, res) {
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       feedModel.findFeedByName(req.params['feedName'])
         .then((feedObj) => {
@@ -76,14 +76,14 @@ module.exports = function(app) {
             .then((response) => response.json())
             .then(function(articles) {
               console.log('articles');
-              console.log(articles);
+              
             });
         });
     }
   }
 
 
-  function getExternalPostsOld(req, res) {
+  function getExternalPosts(req, res) {
     console.log('getExternalPosts');
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       // if this particular feedName doesn't exist yet, create it
@@ -104,18 +104,19 @@ module.exports = function(app) {
             fetch(queryURL + req.params['feedName'])
               .then((response) => response.json())
               .then(function(articles) {
-                for (var art = 0; art < articles.length; articles++) {
+                allArts = articles.articles;
+                for (var art = 0; art < allArts.length; articles++) {
                   // determine if title already exists, if not then add
                   console.log('article');
-                  console.log(art);
-                  postModel.findPostByTitle(art.title)
+                  console.log(allArts[art]);
+                  postModel.findPostByTitle(allArts[art].title)
                     .then(function(maybeFound) {
                       console.log('in getExternalPosts');
                       console.log(maybeFound);
                       if (maybeFound === undefined) {
                         postModel.createPost({
-                          postTitle: art.title,
-                          postLink: art.url,
+                          postTitle: allArts[art].title,
+                          postLink: allArts[art].url,
                           feed: feedObj._id
                         }).then(function(response) {
                           return response.json();
