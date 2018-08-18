@@ -16,6 +16,7 @@ function deleteFeedById(idToDelete) {
 }
 
 function findFeedByName(feedName) {
+  console.log('in the model findFeedByName');
   return model.findOne({feedName: feedName});
 }
 
