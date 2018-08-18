@@ -67,6 +67,23 @@ module.exports = function(app) {
   }
 
   function getExternalPosts(req, res) {
+    if (externalFeeds.indexOf(req.params['feedName']) > -1) {
+      feedModel.findFeedByName(req.params['feedName'])
+        .then((feedObj) => {
+          console.log('in thing');
+          console.log(feedObj);
+          fetch(queryURL + req.params['feedName'])
+            .then((response) => response.json())
+            .then(function(articles) {
+              console.log('articles length');
+              console.log(articles.length);
+            });
+        });
+    }
+  }
+
+
+  function getExternalPostsOld(req, res) {
     console.log('getExternalPosts');
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       // if this particular feedName doesn't exist yet, create it
