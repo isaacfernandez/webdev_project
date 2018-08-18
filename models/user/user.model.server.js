@@ -40,7 +40,7 @@ function addFeedFollow(userId, feedFollowId) {
 }
 
 function addPost(userId, postId) {
-  return mode.update({_id: userId}, {$push: {posts: post}});
+  return model.update({_id: userId}, {$push: {posts: post}});
 }
 
 module.exports = {
