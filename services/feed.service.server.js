@@ -75,8 +75,8 @@ module.exports = function(app) {
           fetch(queryURL + req.params['feedName'])
             .then((response) => response.json())
             .then(function(articles) {
-              console.log('articles length');
-              console.log(articles.length);
+              console.log('articles');
+              console.log(articles);
             });
         });
     }
