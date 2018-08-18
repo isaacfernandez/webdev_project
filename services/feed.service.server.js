@@ -77,9 +77,8 @@ module.exports = function(app) {
             .then(function(arts) {
               console.log('articles');
               articles = arts.articles;
-              console.log(articles);
               for (var ind = 0; ind < articles.length; ind++) {
-                postModel.findPostByTitle(articles[ind].title)
+                postModel.findPostsByTitle(articles[ind].title)
                   .then((response) => {
                     console.log('response');
                     console.log(response);
