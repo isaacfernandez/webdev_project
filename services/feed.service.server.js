@@ -91,6 +91,7 @@ module.exports = function(app) {
                         console.log(response);
                       });
                     } else {
+                      console.log(response);
                       console.log('post already exists');
                     }
                   });
