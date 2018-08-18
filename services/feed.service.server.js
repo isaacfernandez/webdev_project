@@ -66,7 +66,7 @@ module.exports = function(app) {
       });
   }
 
-  function getExternalPosts(req, res) {
+  function getExternalPostsTmp(req, res) {
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       feedModel.findFeedByName(req.params['feedName'])
         .then((feedObj) => {
@@ -75,15 +75,12 @@ module.exports = function(app) {
           fetch(queryURL + req.params['feedName'])
             .then((response) => response.json())
             .then(function(arts) {
-              console.log('articles');
               articles = arts.articles;
-              console.log(articles);
               for (var ind = 0; ind < articles.length; ind++) {
                 postModel.findPostsByTitle(articles[ind].title)
                   .then((response) => {
                     console.log('response');
                     console.log(response);
-                    //console.log(articles[ind].title);console.log(articles[ind].url);console.log(feedObj._id);
                     if (response === null) {
                       postModel.createPost({
                         postTitle: articles[ind]['title'],
@@ -101,7 +98,7 @@ module.exports = function(app) {
   }
 
 
-  function getExternalPostsOld(req, res) {
+  function getExternalPosts(req, res) {
     console.log('getExternalPosts');
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       // if this particular feedName doesn't exist yet, create it
