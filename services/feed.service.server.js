@@ -67,32 +67,41 @@ module.exports = function(app) {
 
   function getExternalPosts(req, res) {
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
-      // one of the existing external feeds
-      feedModel.findFeedByName(req.params['feedName']).then((feedObj) => {
-        fetch(queryURL + req.params['feedName'])
-          .then((response) => response.json())
-          .then(function(articles) {
-            for (var art = 0; art < articles.length; articles++) {
-              // determine if title already exists, if not then add
-              postModel.findPostByTitle(art.title)
-                .then(function(maybeFound) {
-                  console.log('in getExternalPosts');
-                  console.log(maybeFound);
-                  if (maybeFound === undefined) {
-                    postModel.createPost({
-                      postTitle: art.title,
-                      postLink: art.url,
-                      feed: feedObj._id
-                    }).then(function(response) {
-                      return response.json();
-                    }).then(function(recentPost) {
-                      feedModel.addExternalPost(feedObj._id, recentPost._id);
+      // if this particular feedName doesn't exist yet, create it
+      feedModel.findFeedByName(req.params['feedName'])
+        .then((response) => response.json())
+        .then(function(potentialArticle) {
+          if (potentialArticle === null) {
+            feedModel.createFeed({'feedName': req.params['feedName']})
+          }
+        }).then(() => {
+          // one of the existing external feeds
+          feedModel.findFeedByName(req.params['feedName']).then((feedObj) => {
+            fetch(queryURL + req.params['feedName'])
+              .then((response) => response.json())
+              .then(function(articles) {
+                for (var art = 0; art < articles.length; articles++) {
+                  // determine if title already exists, if not then add
+                  postModel.findPostByTitle(art.title)
+                    .then(function(maybeFound) {
+                      console.log('in getExternalPosts');
+                      console.log(maybeFound);
+                      if (maybeFound === undefined) {
+                        postModel.createPost({
+                          postTitle: art.title,
+                          postLink: art.url,
+                          feed: feedObj._id
+                        }).then(function(response) {
+                          return response.json();
+                        }).then(function(recentPost) {
+                          feedModel.addExternalPost(feedObj._id, recentPost._id);
+                        });
+                      }
                     });
-                  }
-                });
-            }
+                }
+              });
           });
-      });
+        });
     }
 
     feedModel.getExternalPosts(req.params['feedName'], req.params['quantity'])
