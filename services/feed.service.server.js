@@ -81,7 +81,7 @@ module.exports = function(app) {
                 console.log(article);
                 postModel.findPostsByTitle(article['title'])
                   .then((response) => {
-                    if (typeof response !== 'undefined' && response.length > 0) {
+                    if (typeof response == 'undefined' || response.length === 0) {
                       console.log('createPost');
                       postModel.createPost({
                         postTitle: article['title'],
