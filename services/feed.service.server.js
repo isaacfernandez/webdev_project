@@ -7,12 +7,20 @@ module.exports = function(app) {
   app.post('/api/feed', createFeed);
   app.delete('/api/feed/:feedId', deleteFeed);
   app.put('/api/feed/:feedId', updateFeed);
-  app.get('/api/feed/:feedId/external/:quantity', getExternalPosts);
+  app.get('/api/feed/:feedName/external/:quantity', getExternalPosts);
   app.get('/api/feed/:feedId/internal/:quantity', getInternalPosts);
   app.get('/api/feed/search/:string', searchForFeeds);
 
   var feedModel = require('../models/feed/feed.model.server');
+  var postModel = require('../models/post/post.model.server');
 
+  var apiKey = 'apiKey=' + process.env.NEWS_API_KEY;
+  var baseURL = 'https://newsapi.org/v2/top-headlines?country=us&';
+  var queryURL = baseURL + apiKey + '&category='
+  var externalFeeds = [
+    'business', 'entertainment', 'health', 'science', 'sports', 'technology'
+  ];
+  
 
   function getFeeds(req, res) {
     feedModel.findAllFeeds()
@@ -58,7 +66,36 @@ module.exports = function(app) {
   }
 
   function getExternalPosts(req, res) {
-    feedModel.getExternalPosts(req.params['feedId'], req.params['quantity'])
+    if (externalFeeds.indexOf(req.params['feedName']) > -1) {
+      // one of the existing external feeds
+      feedModel.findFeedByName(req.params['feedName']).then((feedObj) => {
+        fetch(queryURL + req.params['feedName'])
+          .then((response) => response.json())
+          .then(function(articles) {
+            for (var art = 0; art < articles.length; articles++) {
+              // determine if title already exists, if not then add
+              postModel.findPostByTitle(art.title)
+                .then(function(maybeFound) {
+                  console.log('in getExternalPosts');
+                  console.log(maybeFound);
+                  if (maybeFound === undefined) {
+                    postModel.createPost({
+                      postTitle: art.title,
+                      postLink: art.url,
+                      feed: feedObj._id
+                    }).then(function(response) {
+                      return response.json();
+                    }).then(function(recentPost) {
+                      feedModel.addExternalPost(feedObj._id, recentPost._id);
+                    });
+                  }
+                });
+            }
+          });
+      });
+    }
+
+    feedModel.getExternalPosts(req.params['feedName'], req.params['quantity'])
       .then(function(posts) {
         res.send(posts);
       });
