@@ -23,6 +23,30 @@ app.use(session({
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost');
 
+requireModerator = function(req, res, next) {
+  if (req.session['currentUser'].role !== 'MODERATOR') {
+    res.send({'error': 'Moderator required'});
+  } else {
+    next();
+  }
+}
+
+requireLoggedIn = function(req, res, next) {
+  if (!req.session['currentUser']) {
+    res.send({'error': 'User login required'});
+  } else {
+    next();
+  }
+}
+
+requireAdmin = function(req, res, next) {
+  if (!req.session['currentUser'].role  !== 'ADMIN') {
+    res.send({'error': 'Admin required'});
+  } else {
+    next();
+  }
+}
+
 require('./services/post.service.server')(app);
 require('./services/feed.service.server')(app);
 require('./services/feed-follow.service.server')(app);

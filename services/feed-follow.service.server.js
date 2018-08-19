@@ -1,12 +1,12 @@
 
 module.exports = function(app) {
 
-  app.post('/api/feed/:feedId/follows/:userId', userFollowFeed);
+  app.post('/api/feed/:feedId/follows/:userId', requireLoggedIn, userFollowFeed);
   app.get('/api/feed/:feedId/follows/:quantity', getFeedFollowers);
   app.get('/api/user/:userId/feed-follows/:quantity', getFeedsFollowing);
   app.get('/api/feed/:feedId/isFollowing/:followerId', isUserFollowingFeed);
-  app.delete('/api/feed/:feedId/follows/:userId', deleteFeedFollow);
-  app.delete('/api/feed-follow/:feedFollowId', deleteFeedFollowById);
+  app.delete('/api/feed/:feedId/follows/:userId', requireLoggedIn, deleteFeedFollow);
+  app.delete('/api/feed-follow/:feedFollowId', requireLoggedIn, deleteFeedFollowById);
 
   var feedFollowModel = require('../models/feed-follow/feed-follow.model.server');
   var userModel = require('../models/user/user.model.server');
