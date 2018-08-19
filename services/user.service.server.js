@@ -2,6 +2,7 @@
 module.exports = function (app) {
   app.get('/api/user', findAllUsers);
   app.get('/api/user/id/:userId', findUserById);
+  app.get('/api/user/search/:string', searchForUsers);
   app.get('/api/user/name/:username', findUserByUsername);
   app.get('/api/profile', profile);
   app.post('/api/logout', logout);
@@ -110,5 +111,19 @@ module.exports = function (app) {
       res.send({'success': 'is logged in'});
     }
   }
+
+  function searchForUsers(req, res) {
+    userModel.find({'username':
+      {'$regex': req.params['string'], '$options': 'i'}})
+      .then(function(users) {
+        res.send(users);
+      });
+  }
 }
+
+
+
+
+
+
 
