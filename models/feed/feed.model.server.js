@@ -6,7 +6,6 @@ var postSchema = require('../post/post.schema.server');
 var userFollowSchema = require('../user-follow/user-follow.schema.server');
 var userSchema = require('../user/user.schema.server');
 
-
 var model = mongoose.model('FeedModel', feedSchema);
 
 function createFeed(newFeed) {
@@ -51,7 +50,7 @@ function addExternalPost(feedId, postId) {
   console.log('in addExternalPost');
   console.log('feedId: ' + feedId);
   console.log('postId: ' + postId);
-  return model.update({_id: feedId}, {$push: {externalPosts: postId}});
+  return model.update({_id: feedId}, {$push: {externalPosts: postId}}, function(error){console.log(error)});
 }
 
 function addFeedFollow(feedId, followId) {
