@@ -5,12 +5,12 @@ module.exports = function (app) {
   app.get('/api/user/search/:string', searchForUsers);
   app.get('/api/user/name/:username', findUserByUsername);
   app.get('/api/profile', profile);
-  app.post('/api/logout', logout);
+  app.post('/api/logout', requireLoggedIn, logout);
   app.post('/api/login', login);
   app.post('/api/register', register);
   app.get('/api/login/loggedIn', loggedIn);
-  app.put('/api/user', updateUser); // just add more endpoints meh
-  app.delete('/api/user/:userId', deleteUser);
+  app.put('/api/user', requireLoggedIn, updateUser); // just add more endpoints meh
+  app.delete('/api/user/:userId', requireAdmin, deleteUser);
 
   var userModel = require('../models/user/user.model.server');
 

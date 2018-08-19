@@ -3,9 +3,9 @@
 
 module.exports = function(app) {
   app.get('/api/feed/:quantity', getFeeds);
-  app.post('/api/feed', createFeed);
-  app.delete('/api/feed/:feedId', deleteFeed);
-  app.put('/api/feed/:feedId', updateFeed);
+  app.post('/api/feed', requireModerator, createFeed);
+  app.delete('/api/feed/:feedId', requireModerator, deleteFeed);
+  app.put('/api/feed/:feedId', requireModerator, updateFeed);
   app.get('/api/feed/:feedName/external/:quantity', getExternalPosts);
   app.get('/api/feed/:feedId/internal/:quantity', getInternalPosts);
   app.get('/api/feed/search/:string', searchForFeeds);

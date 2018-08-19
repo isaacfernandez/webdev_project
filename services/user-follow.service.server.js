@@ -1,12 +1,12 @@
 
 module.exports = function(app) {
 
-  app.post('/api/user/:userId/follows/:followedId', followUser);
+  app.post('/api/user/:userId/follows/:followedId', requireLoggedIn, followUser);
   app.get('/api/user/:userId/follows/:quantity', getFollows);
   app.get('/api/user/:userId/follower/:quantity', getFollowers);
   app.get('/api/user/:userId/isFollowing/:followingId', isFollowing);
-  app.delete('/api/user/:userId/follows/:followedId', unfollowUser);
-  app.delete('/api/user-follow/:userFollowId', unfollowUserById);
+  app.delete('/api/user/:userId/follows/:followedId', requireLoggedIn, unfollowUser);
+  app.delete('/api/user-follow/:userFollowId', requireLoggedIn, unfollowUserById);
 
   var userFollowModel = require('../models/user-follow/user-follow.model.server');
   // schema: follower, followed, followingSince

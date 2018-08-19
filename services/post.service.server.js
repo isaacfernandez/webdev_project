@@ -1,9 +1,9 @@
 
 module.exports = function(app) {
 
-  app.post('/api/post/:feedId', postToFeed);
-  app.put('/api/post/:postId', updatePost);
-  app.delete('/api/post/:postId', deletePost);
+  app.post('/api/post/:feedId', requireLoggedIn, postToFeed);
+  app.put('/api/post/:postId', requireModerator, updatePost);
+  app.delete('/api/post/:postId', requireModerator, deletePost);
 
   var postModel = require('../models/post/post.model.server');
 
