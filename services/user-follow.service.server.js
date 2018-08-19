@@ -9,6 +9,7 @@ module.exports = function(app) {
   app.delete('/api/user-follow/:userFollowId', requireLoggedIn, unfollowUserById);
 
   var userFollowModel = require('../models/user-follow/user-follow.model.server');
+  var userModel = require('../models/user/user.model.server');
   // schema: follower, followed, followingSince
 
   function followUser(req, res) {
@@ -17,8 +18,13 @@ module.exports = function(app) {
       followed: req.params['followedId']
     };
     userFollowModel.createUserFollow(newFollow)
-      .then(function(response) {
-        res.send(response);
+      .then(function(follow) {
+        res.send(follow);
+        // now update both of the users with this follow
+        //userModel.findUserById('userId')
+        //  .then(function(followerUser) {
+        //    
+        //  });
       });
   }
 
