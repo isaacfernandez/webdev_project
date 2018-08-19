@@ -113,8 +113,7 @@ module.exports = function (app) {
   }
 
   function searchForUsers(req, res) {
-    userModel.find({'username':
-      {'$regex': req.params['string'], '$options': 'i'}})
+    userModel.findUsersByUsername(req.params['string'])
       .then(function(users) {
         res.send(users);
       });

@@ -21,6 +21,10 @@ function findUserById(idToFind) {
   return model.findById(idToFind);
 }
 
+function findUsersByUsername(stringMatch) {
+  return model.find({'username': {'$regex': stringMatch, '$options': 'i'}});
+}
+
 function createUser(newUser) {
   return model.create(newUser);
 }
@@ -68,6 +72,7 @@ function addPost(userId, postId) {
 module.exports = {
   findUserByCredentials: findUserByCredentials,
   findUserByUsername: findUserByUsername,
+  findUsersByUsername: findUsersByUsername,
   findUserById: findUserById,
   createUser: createUser,
   findAllUsers: findAllUsers,
