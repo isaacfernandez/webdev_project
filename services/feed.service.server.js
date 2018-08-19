@@ -1,7 +1,6 @@
 
 
 
-
 module.exports = function(app) {
   app.get('/api/feed/:quantity', getFeeds);
   app.post('/api/feed', createFeed);
