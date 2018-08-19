@@ -1,6 +1,12 @@
 var mongoose = require('mongoose');
-var schema = require('./user.schema.server');
-var model = mongoose.model('UserModel', schema);
+
+var feedFollowSchema = require('../feed-follow/feed-follow.schema.server');
+var feedSchema = require('../feed/feed.schema.server');
+var postSchema = require('../post/post.schema.server');
+var userFollowSchema = require('../user-follow/user-follow.schema.server');
+var userSchema = require('../user/user.schema.server');
+
+var model = mongoose.model('UserModel', userSchema);
 
 
 function findUserByCredentials(creds) {
@@ -31,6 +37,22 @@ function updateUser(user, idToUpdate) {
   return model.update({_id: idToUpdate}, {$set: user});
 }
 
+function addUserFollow(userId, userFollowId) {
+  return model.update({_id: userId}, {$push: {userFollows: userFollowId}});
+}
+
+function addFeedFollow(userId, feedFollowId) {
+  return model.update({_id: userId}, {$push: {feedFollows: feedFollowId}});
+}
+
+function removeFeedFollowById(userId, feedFollowId) {
+  return model.update({_id: userId}, {$pull: {feedFollows: feedFollowId}});
+}
+
+function addPost(userId, postId) {
+  return model.update({_id: userId}, {$push: {posts: post}});
+}
+
 module.exports = {
   findUserByCredentials: findUserByCredentials,
   findUserByUsername: findUserByUsername,
@@ -38,5 +60,9 @@ module.exports = {
   createUser: createUser,
   findAllUsers: findAllUsers,
   deleteUserById: deleteUserById,
-  updateUser: updateUser
+  updateUser: updateUser,
+  addUserFollow: addUserFollow,
+  addFeedFollow: addFeedFollow,
+  removeFeedFollowById: removeFeedFollowById,
+  addPost: addPost
 };

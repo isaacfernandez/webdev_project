@@ -9,6 +9,8 @@ module.exports = function(app) {
   app.delete('/api/feed-follow/:feedFollowId', deleteFeedFollowById);
 
   var feedFollowModel = require('../models/feed-follow/feed-follow.model.server');
+  var userModel = require('../models/user/user.model.server');
+  var postModel = require('../models/post/post.model.server');
 
   function userFollowFeed(req, res) {
     var newFollow = {
@@ -17,6 +19,7 @@ module.exports = function(app) {
     }
     feedFollowModel.createFeedFollow(newFollow)
       .then(function(feedFollow) {
+        userModel.addFeedFollow(req.params['userId'], feedFollow._id);
         res.send(feedFollow);
       });
   }
@@ -53,6 +56,12 @@ module.exports = function(app) {
   }
 
   function deleteFeedFollow(req, res) {
+    feedFollowModel.findFeedFollowByFeedAndFollow(
+      req.params['feedId'],
+      req.params['followerId'])
+      .then(function(feedFollow) {
+        userModel.removeFeedFollowById(feedFollow.follower, feedFollow._id)
+      });
     feedFollowModel.deleteFeedFollowByFeedAndFollower(
       req.params['feedId'],
       req.params['followerId'])
@@ -62,6 +71,12 @@ module.exports = function(app) {
   }
 
   function deleteFeedFollowById(req, res) {
+    feedFollowModel.findFeedFollowById(req.params['feedFollowId'])
+      .then(function(feedFollow) {
+        userModel.removeFeedFollowById(
+          feedFollow.follower,
+          req.params['feedFollowId'])
+      });
     feedFollowModel.deleteFeedFollowById(req.params['feedFollowId'])
       .then(function(response) {
         res.send(response);

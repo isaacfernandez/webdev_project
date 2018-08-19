@@ -1,9 +1,17 @@
 var mongoose = require('mongoose');
-var schema = require('./post.schema.server');
-var model = mongoose.model('PostModel', schema);
+
+var feedFollowSchema = require('../feed-follow/feed-follow.schema.server');
+var feedSchema = require('../feed/feed.schema.server');
+var postSchema = require('../post/post.schema.server');
+var userFollowSchema = require('../user-follow/user-follow.schema.server');
+var userSchema = require('../user/user.schema.server');
+
+var model = mongoose.model('PostModel', postSchema);
 
 
 function createPost(newPost) {
+  console.log('in createPost');
+  console.log(newPost);
   return model.create(newPost);
 }
 

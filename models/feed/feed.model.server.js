@@ -1,7 +1,12 @@
 var mongoose = require('mongoose');
-var schema = require('./feed.schema.server');
-var model = mongoose.model('FeedModel', schema);
 
+var feedFollowSchema = require('../feed-follow/feed-follow.schema.server');
+var feedSchema = require('../feed/feed.schema.server');
+var postSchema = require('../post/post.schema.server');
+var userFollowSchema = require('../user-follow/user-follow.schema.server');
+var userSchema = require('../user/user.schema.server');
+
+var model = mongoose.model('FeedModel', feedSchema);
 
 function createFeed(newFeed) {
   return model.create(newFeed);
@@ -16,6 +21,8 @@ function deleteFeedById(idToDelete) {
 }
 
 function findFeedByName(feedName) {
+  console.log('in the model findFeedByName');
+  console.log(feedName);
   return model.findOne({feedName: feedName});
 }
 
@@ -28,11 +35,23 @@ function findAllFeeds() {
 }
 
 function getInternalPosts(feedId, quantity) {
-  return model.findById(feedId).populate('internalPosts').externalPosts.limit(quantity);
+  return model.findById({feedId: feedId}).select({'internalPosts': 1});
 }
 
-function getExternalPosts(feedId, quantity) {
-  return model.findById(feedId).populate('externalPosts').externalPosts.limit(quantity);
+function getExternalPosts(feedName, quantity) {
+  return model.find({feedName: feedName}).select({'externalPosts': 1});
+}
+
+function addInternalPost(feedId, postId) {
+  return model.update({_id: feedId}, {$push: {internalPosts: postId}});
+}
+
+function addExternalPost(feedId, postId) {
+  return model.update({_id: feedId}, {$push: {externalPosts: postId}}, function(error){console.log(error)});
+}
+
+function addFeedFollow(feedId, followId) {
+  return model.update({_id: feedId}, {$push: {feedFollows: followId}});
 }
 
 
@@ -44,6 +63,9 @@ module.exports = {
   findFeedById: findFeedById,
   findAllFeeds: findAllFeeds,
   getInternalPosts: getInternalPosts,
-  getExternalPosts: getExternalPosts
+  getExternalPosts: getExternalPosts,
+  addInternalPost: addInternalPost,
+  addExternalPost: addExternalPost,
+  addFeedFollow: addFeedFollow
 };
 
