@@ -20,9 +20,9 @@ module.exports = function(app) {
     userFollowModel.createUserFollow(newFollow)
       .then(function(follow) {
         // now update both of the users with this follow
-        userModel.addUserFollow(req.params['userId'], follow._id)
+        return userModel.addUserFollow(req.params['userId'], follow._id)
           .then(function() {
-            userModel.addUserFollower(req.params['followedId'], follow._id);
+            return userModel.addUserFollower(req.params['followedId'], follow._id);
           }).then(function() {
             return follow;
           });
