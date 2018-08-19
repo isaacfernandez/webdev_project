@@ -26,6 +26,10 @@ function findFeedByName(feedName) {
   return model.findOne({feedName: feedName});
 }
 
+function findFeedsByName(stringMatch) {
+  return model.find({'feedName': {'$regex': stringMatch, '$options': 'i'}})
+}
+
 function findFeedById(idToFind) {
   return model.findById(idToFind);
 }
@@ -60,6 +64,7 @@ module.exports = {
   updateFeed: updateFeed,
   deleteFeedById: deleteFeedById,
   findFeedByName: findFeedByName,
+  findFeedsByName: findFeedsByName,
   findFeedById: findFeedById,
   findAllFeeds: findAllFeeds,
   getInternalPosts: getInternalPosts,

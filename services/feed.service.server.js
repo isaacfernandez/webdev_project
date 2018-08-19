@@ -2,7 +2,8 @@
 
 
 module.exports = function(app) {
-  app.get('/api/feed/:quantity', getFeeds);
+  app.get('/api/feeds/:quantity', getFeeds);
+  app.get('/api/feed/:feedId', getFeed);
   app.post('/api/feed', requireModerator, createFeed);
   app.delete('/api/feed/:feedId', requireModerator, deleteFeed);
   app.put('/api/feed/:feedId', requireModerator, updateFeed);
@@ -20,13 +21,20 @@ module.exports = function(app) {
   var externalFeeds = [
     'business', 'entertainment', 'health', 'science', 'sports', 'technology'
   ];
-  
+ 
+  function getFeed(req, res) {
+    feedModel.findFeedById(req.params['feedId'])
+      .then(function(feed) {
+        res.send(feed);
+      });
+  }
+ 
 
   function getFeeds(req, res) {
     feedModel.findAllFeeds()
       .then(function (feeds) {
         res.send(feeds);
-      })
+      });
   }
 
   function createFeed(req, res) {
@@ -119,11 +127,7 @@ module.exports = function(app) {
   }
 
   function searchForFeeds(req, res) {
-    feedModel.find({'feedName':
-      {'$regex': req.params['string'], '$options': 'i'}})
-      .then(function(feeds) {
-        res.send(feeds);
-      });
+    feedModel.findFeedsByName(req.params['string']);
   }
 
 }
