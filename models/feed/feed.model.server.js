@@ -39,9 +39,7 @@ function getInternalPosts(feedId, quantity) {
 }
 
 function getExternalPosts(feedName, quantity) {
-  return model.find({feedName: feedName}, function(err, subjects) {
-    return subjects['externalPosts'];
-  });
+  return model.find({feedName: feedName}).select({'externalPosts': 1});
 }
 
 //populate('feed.externalPosts');//.externalPosts.limit(quantity);
