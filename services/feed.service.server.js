@@ -112,6 +112,7 @@ module.exports = function(app) {
   function getInternalPosts(req, res) {
     feedModel.getInternalPosts(req.params['feedId'], req.params['quantity'])
       .then(function(posts) {
+        posts = posts[0]['internalPosts'].slice(0, req.params['quantity']);
         res.send(posts);
       });
   }
