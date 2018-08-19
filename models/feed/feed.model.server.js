@@ -18,9 +18,7 @@ function deleteFeedById(idToDelete) {
 function findFeedByName(feedName) {
   console.log('in the model findFeedByName');
   console.log(feedName);
-  var ret = model.findOne({feedName: feedName});
-  console.log('after findOne');
-  return ret;
+  return model.findOne({feedName: feedName});
 }
 
 function findFeedById(idToFind) {
@@ -36,7 +34,7 @@ function getInternalPosts(feedId, quantity) {
 }
 
 function getExternalPosts(feedName, quantity) {
-  return model.find({feedName: feedName}).populate('externalPosts');//.externalPosts.limit(quantity);
+  return model.find({feedName: feedName});//.populate('externalPosts');//.externalPosts.limit(quantity);
 }
 
 function addInternalPost(feedId, postId) {
