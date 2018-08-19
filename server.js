@@ -23,10 +23,19 @@ app.use(session({
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost');
 
+
 requireModerator = function(req, res, next) {
   if (req.session['currentUser'].role !== 'MODERATOR' &&
       req.session['currentUser'].role !== 'ADMIN') {
     res.send({'error': 'Moderator required'});
+  } else {
+    next();
+  }
+}
+
+requireLoggedOut = function(req, res, next) {
+  if (req.session['currentUser']) {
+    res.send({'error': 'Must not be logged in'});
   } else {
     next();
   }

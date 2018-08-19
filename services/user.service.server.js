@@ -6,8 +6,8 @@ module.exports = function (app) {
   app.get('/api/user/name/:username', findUserByUsername);
   app.get('/api/profile', profile);
   app.post('/api/logout', requireLoggedIn, logout);
-  app.post('/api/login', login);
-  app.post('/api/register', register);
+  app.post('/api/login', requireLoggedOut, login);
+  app.post('/api/register', requireLoggedOut, register);
   app.get('/api/login/loggedIn', loggedIn);
   app.put('/api/user', requireLoggedIn, updateUser); // just add more endpoints meh
   app.delete('/api/user/:userId', requireAdmin, deleteUser);
@@ -51,7 +51,7 @@ module.exports = function (app) {
 
   function profile(req, res) {
     if (req.session['currentUser'] === undefined) {
-      res.send(403);
+      res.send({'error': 'not logged in'});
     } else {
       userModel.findUserById(req.session['currentUser']._id)
         .then(function(response) {
