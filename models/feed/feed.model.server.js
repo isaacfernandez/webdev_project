@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var schema = require('./feed.schema.server');
-var post = require('../post/post.schema.server');
+var postSchema = require('../post/post.schema.server');
 var model = mongoose.model('FeedModel', schema);
 
 function createFeed(newFeed) {
@@ -18,7 +18,9 @@ function deleteFeedById(idToDelete) {
 function findFeedByName(feedName) {
   console.log('in the model findFeedByName');
   console.log(feedName);
-  return model.findOne({feedName: feedName});
+  var ret = model.findOne({feedName: feedName});
+  console.log('after findOne');
+  return ret;
 }
 
 function findFeedById(idToFind) {
