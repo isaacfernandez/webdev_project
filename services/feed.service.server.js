@@ -12,8 +12,8 @@ module.exports = function(app) {
   app.get('/api/feed/search/:string', searchForFeeds);
 
   var fetch = require('node-fetch');
-  var feedModel = require('../models/feed/feed.model.server');
   var postModel = require('../models/post/post.model.server');
+  var feedModel = require('../models/feed/feed.model.server');
 
   var apiKey = 'apiKey=' + process.env.NEWS_API_KEY;
   var baseURL = 'https://newsapi.org/v2/top-headlines?country=us&';

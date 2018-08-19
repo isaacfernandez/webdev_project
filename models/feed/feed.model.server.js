@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var schema = require('./feed.schema.server');
+var post = require('../post/post.schema.server');
 var model = mongoose.model('FeedModel', schema);
-
 
 function createFeed(newFeed) {
   return model.create(newFeed);

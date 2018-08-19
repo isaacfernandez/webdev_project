@@ -10,6 +10,7 @@ module.exports = function(app) {
 
   var feedFollowModel = require('../models/feed-follow/feed-follow.model.server');
   var userModel = require('../models/user/user.model.server');
+  var postModel = require('../models/post/post.model.server');
 
   function userFollowFeed(req, res) {
     var newFollow = {
