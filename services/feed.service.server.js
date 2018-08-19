@@ -74,6 +74,7 @@ module.exports = function(app) {
       feedModel.getExternalPosts(req.params['feedName'], req.params['quantity'])
         .then(function(posts) {
           console.log('here');
+          posts = posts[0]['externalPosts'].slice(0, req.params['quantity']);
           res.send(posts);
         });
       feedModel.findFeedByName(req.params['feedName'])
