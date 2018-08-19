@@ -35,15 +35,12 @@ function findAllFeeds() {
 }
 
 function getInternalPosts(feedId, quantity) {
-  return model.findById(feedId).populate('internalPosts');//.externalPosts.limit(quantity);
+  return model.findById({feedId: feedId}).select({'internalPosts': 1});
 }
 
 function getExternalPosts(feedName, quantity) {
   return model.find({feedName: feedName}).select({'externalPosts': 1});
 }
-
-//populate('feed.externalPosts');//.externalPosts.limit(quantity);
-//}
 
 function addInternalPost(feedId, postId) {
   return model.update({_id: feedId}, {$push: {internalPosts: postId}});
