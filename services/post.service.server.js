@@ -4,6 +4,7 @@ module.exports = function(app) {
   app.post('/api/post/:feedId', requireLoggedIn, postToFeed);
   app.put('/api/post/:postId', requireModerator, updatePost);
   app.delete('/api/post/:postId', requireModerator, deletePost);
+  app.get('/api/post/:postId', getPost);
 
   var postModel = require('../models/post/post.model.server');
 
@@ -30,6 +31,13 @@ module.exports = function(app) {
 
   function deletePost(req, res) {
     postModel.deletePostById(req.params['postId'])
+      .then(function(response) {
+        res.send(response);
+      });
+  }
+
+  function getPost(req, res) {
+    postModel.findPostById(req.params['postId'])
       .then(function(response) {
         res.send(response);
       });
