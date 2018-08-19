@@ -22,14 +22,14 @@ module.exports = function (app) {
           req.session['currentUser'] = user;
           res.json(user);
         } else {
-          res.sendStatus(404);
+          res.send({'error': 'credentials not found'});
         }
       })
   }
 
   function logout(req, res) {
     req.session.destroy();
-    res.send(200);
+    res.send({'success': 'logged out'});
   }
 
   function findUserById(req, res) {
@@ -72,7 +72,7 @@ module.exports = function (app) {
               res.send(user);
             });
         } else {
-          res.sendStatus(404);
+          res.send({'error': 'username taken'});
         }
       });
   }
@@ -84,7 +84,7 @@ module.exports = function (app) {
         if (response.success === 1) {
           res.json(user);
         } else {
-          res.sendStatus(404);
+          res.send({'error': 'failed to update user'});
         }
       });
   }
@@ -105,14 +105,10 @@ module.exports = function (app) {
 
   function loggedIn(req, res) {
     if (req.session['currentUser'] === undefined) {
-      res.sendStatus(404);
+      res.send({'error': 'not logged in'});
     } else {
-      res.sendStatus(200);
+      res.send({'success': 'is logged in'});
     }
   }
-
-  function logout(req, res) {
-    req.session.destroy();
-    res.sendStatus(200);
-  }
 }
+

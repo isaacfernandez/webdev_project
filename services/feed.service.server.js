@@ -42,7 +42,7 @@ module.exports = function(app) {
               res.send(feed);
             });
         } else {
-          res.sendStatus(404);
+          res.send({'error': 'name already taken'});
         }
       });
   }
@@ -61,7 +61,7 @@ module.exports = function(app) {
         if (response.success === 1) {
           res.json(feed);
         } else {
-          res.sendStatus(404);
+          res.send({'error': 'failed to update'});
         }
       });
   }
