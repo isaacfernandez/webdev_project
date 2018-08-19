@@ -24,8 +24,10 @@ module.exports = function(app) {
           .then(function() {
             userModel.addUserFollower(req.params['followedId'], follow._id);
           }).then(function() {
-            res.send(follow);
+            return follow;
           });
+      }).then(function(follow) {
+        res.send(follow);
       });
   }
 
