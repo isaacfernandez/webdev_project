@@ -12,7 +12,7 @@ Project Prototype: This can be a basic listing and detailing (No fancy User inte
  * get('/api/user/:userId/feed-follows/:quantity', getFeedsFollowing)
  * get('/api/feed/:feedId/isFollowing/:followerId', isUserFollowingFeed)
  * delete('/api/feed/:feedId/follows/:userId', requireLoggedIn, deleteFeedFollow)
- * delete('/api/feed-follow/:feedFollowId', requireLoggedIn, deleteFeedFollowById)
+ * delete('/api/feed-follow/:feedFollowId', requireLoggedIn,deleteFeedFollowById);
  * get('/api/user', findAllUsers)
  * get('/api/user/id/:userId', findUserById)
  * get('/api/user/search/:string', searchForUsers)
@@ -32,7 +32,9 @@ Project Prototype: This can be a basic listing and detailing (No fancy User inte
  * delete('/api/user-follow/:userFollowId', requireLoggedIn, unfollowUserById)
  * post('/api/post/:feedId', requireLoggedIn, postToFeed)
  * put('/api/post/:postId', requireModerator, updatePost)
- * delete('/api/post/:postId', requireModerator, deletePost)
+ * delete('/api/post/internal/:postId', requireModerator, deleteInternalPost)
+ * delete('/api/post/external/:postId', requireModerator, deleteExternalPost)
+ * get('/api/post/:postId', getPost)
  * get('/api/feeds/:quantity', getFeeds)
  * get('/api/feed/:feedId', getFeed)
  * post('/api/feed', requireModerator, createFeed)
@@ -41,4 +43,3 @@ Project Prototype: This can be a basic listing and detailing (No fancy User inte
  * get('/api/feed/:feedName/external/:quantity', getExternalPosts)
  * get('/api/feed/:feedName/internal/:quantity', getInternalPosts)
  * get('/api/feed/search/:string', searchForFeeds)
-
