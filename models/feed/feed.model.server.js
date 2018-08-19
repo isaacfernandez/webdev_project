@@ -39,7 +39,7 @@ function getInternalPosts(feedId, quantity) {
 }
 
 function getExternalPosts(feedName, quantity) {
-  return model.find({feedName: feedName});//.populate('externalPosts');//.externalPosts.limit(quantity);
+  return model.find({feedName: feedName}).populate('externalPosts');//.externalPosts.limit(quantity);
 }
 
 function addInternalPost(feedId, postId) {
