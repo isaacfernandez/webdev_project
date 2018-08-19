@@ -42,10 +42,12 @@ function updateUser(user, idToUpdate) {
 }
 
 function addUserFollow(userId, userFollowId) {
+  console.log('in addUserFollow');
   return model.update({_id: userId}, {$push: {userFollows: userFollowId}});
 }
 
 function addUserFollower(userId, userFollowerId) {
+  console.log('in addUserFollower');
   return model.update({_id: userId}, {$push: {userFollowers: userFollowerId}});
 }
 
