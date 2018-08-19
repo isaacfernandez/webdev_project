@@ -89,70 +89,25 @@ module.exports = function(app) {
                         feed: feedObj._id
                       }).then(function(response) {
                         console.log(response);
+                        feedModel.addExternalPost(feedObj._id, response._id);
                       });
                     } else {
-                      console.log(response);
                       console.log('post already exists');
                     }
                   });
                 });
             });
         });
-    }
-  }
-
-  function getExternalPostsOld(req, res) {
-    console.log('getExternalPosts');
-    if (externalFeeds.indexOf(req.params['feedName']) > -1) {
-      // if this particular feedName doesn't exist yet, create it
-      feedModel.findFeedByName(req.params['feedName'])
-        .then(function(potentialArticle) {
-          console.log('potentialArticle');
-          console.log(potentialArticle);
-          if (potentialArticle === null) {
-            console.log('creating feed');
-            feedModel.createFeed({'feedName': req.params['feedName']})
-            console.log('created feed');
-          }
-        }).then(() => {
-          // one of the existing external feeds
-          feedModel.findFeedByName(req.params['feedName']).then((feedObj) => {
-            console.log('in second');
-            console.log(feedObj);
-            fetch(queryURL + req.params['feedName'])
-              .then((response) => response.json())
-              .then(function(articles) {
-                allArts = articles.articles;
-                for (var art = 0; art < allArts.length; articles++) {
-                  // determine if title already exists, if not then add
-                  console.log('article');
-                  console.log(allArts[art]);
-                  postModel.findPostByTitle(allArts[art].title)
-                    .then(function(maybeFound) {
-                      console.log('in getExternalPosts');
-                      console.log(maybeFound);
-                      if (maybeFound === undefined) {
-                        postModel.createPost({
-                          postTitle: allArts[art].title,
-                          postLink: allArts[art].url,
-                          feed: feedObj._id
-                        }).then(function(response) {
-                          return response.json();
-                        }).then(function(recentPost) {
-                          feedModel.addExternalPost(feedObj._id, recentPost._id);
-                        });
-                      }
-                    });
-                }
-              });
+        // It seems reasonable to not give the absolutely most up to date posts
+        // and waiting for the promises to resolve is not an acceptable user
+        // experience, hence returning whatever the currently most up to date are.
+        feedModel.getExternalPosts(req.params['feedName'], req.params['quantity'])
+          .then(function(posts) {
+            res.send(posts);
           });
-        });
+    } else {
+      res.send({'error': 'not an existing external feed'});
     }
-
-    feedModel.getExternalPosts(req.params['feedName'], req.params['quantity'])
-      .then(function(posts) {
-        res.send(posts);
-      });
   }
 
   function getInternalPosts(req, res) {
