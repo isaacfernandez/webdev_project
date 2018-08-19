@@ -79,24 +79,19 @@ module.exports = function(app) {
       feedModel.findFeedByName(req.params['feedName'])
         .then((feedObj) => {
           console.log('in thing');
-          console.log(feedObj);
           fetch(queryURL + req.params['feedName'])
             .then((response) => response.json())
             .then(function(arts) {
               articles = arts.articles;
               articles.forEach(function(article) {
-                console.log('article');
-                console.log(article);
                 postModel.findPostsByTitle(article['title'])
                   .then((response) => {
                     if (typeof response == 'undefined' || response.length === 0) {
-                      console.log('createPost');
                       postModel.createPost({
                         postTitle: article['title'],
                         postLink: article['url'],
                         feed: feedObj._id
                       }).then(function(response) {
-                        console.log(response);
                         feedModel.addExternalPost(feedObj._id, response._id);
                       });
                     } else {
