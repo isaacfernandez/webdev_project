@@ -33,6 +33,7 @@ module.exports = function(app) {
     userFollowModel.findUserFollowsForFollower(req.params['userId'])
       .sort({'followingSince': -1})
       .limit(parseInt(req.params['quantity']))
+      .populate('followed')
       .then(function(follows) {
         res.send(follows);
       });
