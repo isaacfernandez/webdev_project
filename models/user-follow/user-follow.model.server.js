@@ -29,6 +29,10 @@ function findUserFollowById(idToFind) {
   return model.findById(idToFind);
 }
 
+function findUserFollowByFollowerAndFollowed(follower, followed) {
+  return model.findOne({follower: follower, followed: followed});
+}
+
 function doesUserFollowOther(userId, otherId) {
   return model.find({follower: userId, followed: otherId});
 }
@@ -52,6 +56,7 @@ module.exports = {
   deleteUserFollowById: deleteUserFollowById,
   deleteUserFollowByFollowerAndFollowed: deleteUserFollowByFollowerAndFollowed,
   findUserFollowById: findUserFollowById,
+  findUserFollowByFollowerAndFollowed: findUserFollowByFollowerAndFollowed,
   doesUserFollowOther: doesUserFollowOther,
   findUserFollowsForFollowed: findUserFollowsForFollowed,
   findUserFollowsForFollower: findUserFollowsForFollower,

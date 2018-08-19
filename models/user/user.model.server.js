@@ -41,8 +41,16 @@ function addUserFollow(userId, userFollowId) {
   return model.update({_id: userId}, {$push: {userFollows: userFollowId}});
 }
 
-function addUserFollower(userId, userFollowId) {
-  return model.update({_id: userId}, {$push: {userFollowers: userFollowId}});
+function addUserFollower(userId, userFollowerId) {
+  return model.update({_id: userId}, {$push: {userFollowers: userFollowerId}});
+}
+
+function removeUserFollow(userId, userFollowId) {
+  return model.update({_id: userId}, {$pull: {userFollows: userFollowId}});
+}
+
+function removeUserFollower(userId, userFollowerId) {
+  return model.update({_id: userId}, {$pull: {userFollowers: userFollowerId}});
 }
 
 function addFeedFollow(userId, feedFollowId) {
@@ -67,6 +75,8 @@ module.exports = {
   updateUser: updateUser,
   addUserFollow: addUserFollow,
   addUserFollower: addUserFollower,
+  removeUserFollow: removeUserFollow,
+  removeUserFollower: removeUserFollower,
   addFeedFollow: addFeedFollow,
   removeFeedFollowById: removeFeedFollowById,
   addPost: addPost

@@ -21,10 +21,8 @@ module.exports = function(app) {
       .then(function(follow) {
         res.send(follow);
         // now update both of the users with this follow
-        //userModel.findUserById('userId')
-        //  .then(function(followerUser) {
-        //    
-        //  });
+        userModel.addUserFollow(req.params['userId'], follow._id);
+        userModel.addUserFollower(req.params['followedId'], follow._id);
       });
   }
 
@@ -60,23 +58,34 @@ module.exports = function(app) {
   }
 
   function unfollowUser(req, res) {
-    userFollowModel.deleteUserFollowByFollowerAndFollowed(
-      req.params['userId'],
+    userFollowModel.findUserFollowByFollowerAndFollowed(
+      req.params['usedId'],
       req.params['followedId'])
-      .then(function(response) {
-        res.send(response)
+      .then(function(follow) {
+        userFollowModel.deleteUserFollowByFollowerAndFollowed(
+          req.params['userId'],
+          req.params['followedId'])
+          .then(function(response) {
+            res.send(response);
+            // now update both of the users with this follow
+            userModel.removeUserFollow(follow.follower, follow._id);
+            userModel.removeUserFollowed(follow.followed, follow._id);
+          });
       });
   }
 
   function unfollowUserById(req, res) {
-    userFollowModel.deleteUserFollowById(req.params['userFollowId'])
-      .then(function(response) {
-        res.send(response)
+    userFollowModel.findUserFollowById(req.params['userFollowId'])
+      .then(function(userFollow) {
+        userFollowModel.deleteUserFollowById(req.params['userFollowId'])
+          .then(function(response) {
+            res.send(response);
+            userModel.removeUserFollow(userFollow.follower, userFollow._id);
+            userModel.removeUserFollower(userFollow.followed, userFollow._id);
+          });
       });
   }
 
 }
-
-
 
 
