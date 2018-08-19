@@ -47,11 +47,19 @@ function getExternalPosts(feedName, quantity) {
 }
 
 function addInternalPost(feedId, postId) {
-  return model.update({_id: feedId}, {$push: {internalPosts: postId}});
+  return model.update({_id: feedId}, {$push: {internalPosts: postId}}, function(error){});
 }
 
 function addExternalPost(feedId, postId) {
   return model.update({_id: feedId}, {$push: {externalPosts: postId}}, function(error){console.log(error)});
+}
+
+function removeInternalPost(feedId, postId) {
+  return model.update({_id: feedId}, {$pull: {internalPosts: postId}}, function(error){});
+}
+
+function removeExternalPost(feedId, postId) {
+  return model.update({_id: feedId}, {$pull: {externalPosts: postId}}, function(error){});
 }
 
 function addFeedFollow(feedId, followId) {
@@ -71,6 +79,8 @@ module.exports = {
   getExternalPosts: getExternalPosts,
   addInternalPost: addInternalPost,
   addExternalPost: addExternalPost,
+  removeInternalPost: removeInternalPost,
+  removeExternalPost: removeExternalPost,
   addFeedFollow: addFeedFollow
 };
 
