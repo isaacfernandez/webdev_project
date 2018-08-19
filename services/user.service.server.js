@@ -108,7 +108,7 @@ module.exports = function (app) {
     if (req.session['currentUser'] === undefined) {
       res.send({'error': 'not logged in'});
     } else {
-      res.send({'success': 'is logged in'});
+      res.send(req.session['currentUser']);
     }
   }
 
