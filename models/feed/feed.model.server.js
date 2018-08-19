@@ -47,9 +47,6 @@ function addInternalPost(feedId, postId) {
 }
 
 function addExternalPost(feedId, postId) {
-  console.log('in addExternalPost');
-  console.log('feedId: ' + feedId);
-  console.log('postId: ' + postId);
   return model.update({_id: feedId}, {$push: {externalPosts: postId}}, function(error){console.log(error)});
 }
 
