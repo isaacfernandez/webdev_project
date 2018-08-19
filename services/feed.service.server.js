@@ -94,7 +94,7 @@ module.exports = function(app) {
                       }).then(function(response) {
                         console.log('what is the response');
                         console.log(response);
-                        feedModel.addExternalPost(feedObj._id, response._id);
+                        feedModel.addExternalPost(response.feed, response._id);
                       });
                     } else {
                       console.log('post already exists');
