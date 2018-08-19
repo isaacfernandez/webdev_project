@@ -8,7 +8,7 @@ module.exports = function(app) {
   app.delete('/api/feed/:feedId', requireModerator, deleteFeed);
   app.put('/api/feed/:feedId', requireModerator, updateFeed);
   app.get('/api/feed/:feedName/external/:quantity', getExternalPosts);
-  app.get('/api/feed/:feedId/internal/:quantity', getInternalPosts);
+  app.get('/api/feed/:feedName/internal/:quantity', getInternalPosts);
   app.get('/api/feed/search/:string', searchForFeeds);
 
   var fetch = require('node-fetch');
@@ -119,7 +119,7 @@ module.exports = function(app) {
   }
 
   function getInternalPosts(req, res) {
-    feedModel.getInternalPosts(req.params['feedId'], req.params['quantity'])
+    feedModel.getInternalPosts(req.params['feedName'], req.params['quantity'])
       .then(function(posts) {
         posts = posts[0]['internalPosts'].slice(0, req.params['quantity']);
         res.send(posts);
@@ -127,7 +127,10 @@ module.exports = function(app) {
   }
 
   function searchForFeeds(req, res) {
-    feedModel.findFeedsByName(req.params['string']);
+    feedModel.findFeedsByName(req.params['string'])
+      .then(function(feeds) {
+         res.send(feeds);
+      });
   }
 
 }

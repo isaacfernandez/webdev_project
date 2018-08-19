@@ -38,8 +38,8 @@ function findAllFeeds() {
   return model.find();
 }
 
-function getInternalPosts(feedId, quantity) {
-  return model.findById({feedId: feedId}).select({'internalPosts': 1});
+function getInternalPosts(feedName, quantity) {
+  return model.findById({feedName: feedName}).select({'internalPosts': 1});
 }
 
 function getExternalPosts(feedName, quantity) {
