@@ -58,6 +58,9 @@ module.exports = {
   findFeedById: findFeedById,
   findAllFeeds: findAllFeeds,
   getInternalPosts: getInternalPosts,
-  getExternalPosts: getExternalPosts
+  getExternalPosts: getExternalPosts,
+  addInternalPost: addInternalPost,
+  addExternalPost: addExternalPost,
+  addFeedFollow: addFeedFollow
 };
 
