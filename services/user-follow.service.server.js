@@ -29,7 +29,7 @@ module.exports = function(app) {
   function getFollows(req, res) {
     userFollowModel.findUserFollowsForFollower(req.params['userId'])
       .sort({'followingSince': -1})
-      .limit(req.params['quantity'])
+      .limit(parseInt(req.params['quantity']))
       .then(function(follows) {
         res.send(follows);
       });
@@ -38,7 +38,7 @@ module.exports = function(app) {
   function getFollowers(req, res) {
     userFollowModel.findUserFollowsForFollowed(req.params['userId'])
       .sort({'followingSince': -1})
-      .limit(req.params['quantity'])
+      .limit(parseInt(req.params['quantity']))
       .then(function(follows) {
         res.send(follows);
       });
