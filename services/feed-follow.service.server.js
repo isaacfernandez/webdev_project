@@ -19,15 +19,16 @@ module.exports = function(app) {
     }
     feedFollowModel.createFeedFollow(newFollow)
       .then(function(feedFollow) {
-        userModel.addFeedFollow(req.params['userId'], feedFollow._id);
-        res.send(feedFollow);
+        return userModel.addFeedFollow(req.params['userId'], feedFollow._id);
+      }).then(function(response) {
+        res.send(response);
       });
   }
 
   function getFeedFollowers(req, res) {
     feedFollowModel.findFeedFollowsForFeed(req.params['feedId'])
       .sort({'followingSince': -1})
-      .limit(req.params['quantity'])
+      .limit(parseInt(req.params['quantity']))
       .then(function(followers) {
         res.send(followers);
       });
@@ -36,7 +37,7 @@ module.exports = function(app) {
   function getFeedsFollowing(req, res) {
     feedFollowModel.findFeedFollowsOfFollower(req.params['userId'])
       .sort({'followingSince': -1})
-      .limit(req.params['quantity'])
+      .limit(parseInt(req.params['quantity']))
       .then(function(feeds) {
         res.send(feeds);
       });
@@ -48,9 +49,9 @@ module.exports = function(app) {
       req.params['followerId'])
       .then(function(potentialFollow) {
         if (potentialFollow !== null) {
-          res.json({'response': true});
+          res.json(potentialFollow);
         } else {
-          res.json({'response': false});
+          res.json({'error': 'not following feed'});
         }
       });
   }
@@ -60,12 +61,13 @@ module.exports = function(app) {
       req.params['feedId'],
       req.params['followerId'])
       .then(function(feedFollow) {
-        userModel.removeFeedFollowById(feedFollow.follower, feedFollow._id)
-      });
-    feedFollowModel.deleteFeedFollowByFeedAndFollower(
-      req.params['feedId'],
-      req.params['followerId'])
-      .then(function(response) {
+        return userModel.removeFeedFollowById(feedFollow.follower, feedFollow._id)
+          .then(function() {
+            return feedFollowModel.deleteFeedFollowByFeedAndFollower(
+              req.params['feedId'],
+              req.params['followerId']);
+          });
+      }).then(function(response) {
         res.send(response);
       });
   }
@@ -73,12 +75,13 @@ module.exports = function(app) {
   function deleteFeedFollowById(req, res) {
     feedFollowModel.findFeedFollowById(req.params['feedFollowId'])
       .then(function(feedFollow) {
-        userModel.removeFeedFollowById(
+        return userModel.removeFeedFollowById(
           feedFollow.follower,
           req.params['feedFollowId'])
-      });
-    feedFollowModel.deleteFeedFollowById(req.params['feedFollowId'])
-      .then(function(response) {
+          .then(function(feedFollow) {
+            return feedFollowModel.deleteFeedFollowById(req.params['feedFollowId'])
+          });
+      }).then(function(response) {
         res.send(response);
       });
   }

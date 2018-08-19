@@ -74,15 +74,16 @@ module.exports = function(app) {
   }
 
   function getExternalPosts(req, res) {
+    var quantity = parseInt(req.params['quantity']);
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       // It seems reasonable to not give the absolutely most up to date posts
       // and waiting for the promises to resolve is not an acceptable user
       // experience because of the newsapi.org query latency,
       // hence returning whatever the currently most up to date are.
-      feedModel.getExternalPosts(req.params['feedName'], req.params['quantity'])
+      feedModel.getExternalPosts(req.params['feedName'], quantity)
         .then(function(posts) {
           console.log('here');
-          posts = posts[0]['externalPosts'].slice(0, req.params['quantity']);
+          posts = posts[0]['externalPosts'].slice(0, quantity);
           res.send(posts);
         });
       // now update the DB so it mirror what our external API would show
@@ -119,9 +120,9 @@ module.exports = function(app) {
   }
 
   function getInternalPosts(req, res) {
-    feedModel.getInternalPosts(req.params['feedName'], req.params['quantity'])
+    feedModel.getInternalPosts(req.params['feedName'], quantity)
       .then(function(posts) {
-        posts = posts[0]['internalPosts'].slice(0, req.params['quantity']);
+        posts = posts[0]['internalPosts'].slice(0, quantity);
         res.send(posts);
       });
   }
