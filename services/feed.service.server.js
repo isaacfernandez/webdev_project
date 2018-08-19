@@ -92,6 +92,8 @@ module.exports = function(app) {
                         postLink: article['url'],
                         feed: feedObj._id
                       }).then(function(response) {
+                        console.log('what is the response');
+                        console.log(response);
                         feedModel.addExternalPost(feedObj._id, response._id);
                       });
                     } else {
