@@ -39,6 +39,8 @@ module.exports = function(app) {
 
   function createFeed(req, res) {
     var keep_going;
+    console.log('in createFeed');
+    console.log(req.body);
     feedModel.findFeedByName(req.body.feedName)
       .then(function(response) {
         keep_going = response === null;
