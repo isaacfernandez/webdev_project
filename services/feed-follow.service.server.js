@@ -3,6 +3,7 @@ module.exports = function(app) {
 
   app.post('/api/feed/:feedId/follows/:userId', requireLoggedIn, userFollowFeed);
   app.get('/api/feed/:feedId/follows/:quantity', getFeedFollowers);
+  app.get('/api/feed/:feedId/follows/count', getFeedFollowersCount);
   app.get('/api/user/:userId/feed-follows/:quantity', getFeedsFollowing);
   app.get('/api/feed/:feedId/isFollowing/:followerId', isUserFollowingFeed);
   app.delete('/api/feed/:feedId/follows/:userId', requireLoggedIn, deleteFeedFollow);
@@ -22,6 +23,13 @@ module.exports = function(app) {
         return userModel.addFeedFollow(req.params['userId'], feedFollow._id);
       }).then(function(response) {
         res.send(response);
+      });
+  }
+
+  function getFeedFollowersCount(req, res) {
+    feedFollowModel.findFeedFollowsForFeed(req.params['feedId'])
+      .then(function(followers) {
+        res.send(followers.length);
       });
   }
 
