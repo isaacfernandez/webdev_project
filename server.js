@@ -50,7 +50,7 @@ requireLoggedIn = function(req, res, next) {
 }
 
 requireAdmin = function(req, res, next) {
-  if (!req.session['currentUser'].role  !== 'ADMIN') {
+  if (req.session['currentUser'].role  !== 'ADMIN') {
     res.send({'error': 'Admin required'});
   } else {
     next();
