@@ -72,7 +72,7 @@ function addPostToUser(userId, postId) {
   return model.update({_id: userId}, {$push: {posts: postId}}, function(error){console.log(error);});
 }
 
-function removePostfromUser(userId, postId) {
+function removePostFromUser(userId, postId) {
   return model.update({_id: userId}, {$pull: {posts: postId}}, function(error){console.log(error);});
 }
 
@@ -91,7 +91,7 @@ module.exports = {
   removeUserFollower: removeUserFollower,
   addFeedFollow: addFeedFollow,
   removeFeedFollowById: removeFeedFollowById,
-  addPost: addPost,
-  removePost: removePost
+  addPostToUser: addPostToUser,
+  removePostFromUser: removePostFromUser
 };
 
