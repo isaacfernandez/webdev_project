@@ -29,6 +29,8 @@ module.exports = function(app) {
   function getFeedFollowersCount(req, res) {
     feedFollowModel.findFeedFollowsForFeed(req.params['feedId'])
       .then(function(followers) {
+        console.log('followers in count');
+        console.log(followers);
         res.send(followers.length);
       });
   }
@@ -57,9 +59,9 @@ module.exports = function(app) {
       req.params['followerId'])
       .then(function(potentialFollow) {
         if (potentialFollow !== null) {
-          res.json(potentialFollow);
+          res.send(potentialFollow);
         } else {
-          res.json({'error': 'not following feed'});
+          res.send({'error': 'not following feed'});
         }
       });
   }

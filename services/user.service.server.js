@@ -21,7 +21,7 @@ module.exports = function (app) {
       .then(function(user) {
         if (user !== null) {
           req.session['currentUser'] = user;
-          res.json(user);
+          res.send(user);
         } else {
           res.send({'error': 'credentials not found'});
         }
@@ -37,7 +37,7 @@ module.exports = function (app) {
     var id = req.params['userId'];
     userModel.findUserById(id)
       .then(function (user) {
-        res.json(user);
+        res.send(user);
       })
   }
 
@@ -45,7 +45,7 @@ module.exports = function (app) {
     var username = req.params['username'];
     userModel.findUserByUsername(username)
       .then(function (user) {
-        res.json(user);
+        res.send(user);
       })
   }
 
@@ -83,7 +83,7 @@ module.exports = function (app) {
     userModel.updateUser(user, req.params['userId'])
       .then(function (response) {
         if (response.success === 1) {
-          res.json(user);
+          res.send(user);
         } else {
           res.send({'error': 'failed to update user'});
         }

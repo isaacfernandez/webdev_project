@@ -68,7 +68,7 @@ module.exports = function(app) {
     feedModel.updateFeed(req.params['feedId'], feed)
       .then(function(response) {
         if (response.success === 1) {
-          res.json(feed);
+          res.send(feed);
         } else {
           res.send({'error': 'failed to update'});
         }
@@ -93,7 +93,7 @@ module.exports = function(app) {
         .then((feedObj) => {
           console.log('in thing');
           fetch(queryURL + req.params['feedName'])
-            .then((response) => response.json())
+            .then((response) => response.json())//res.send(response))
             .then(function(arts) {
               articles = arts.articles;
               articles.forEach(function(article) {

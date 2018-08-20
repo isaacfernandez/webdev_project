@@ -55,9 +55,9 @@ module.exports = function(app) {
       req.params['followingId'])
       .then(function(potentialFollow) {
         if (potentialFollow !== null) {
-          res.json({'response': true});
+          res.send({'response': true});
         } else {
-          res.json({'response': false});
+          res.send({'response': false});
         }
       });
   }
