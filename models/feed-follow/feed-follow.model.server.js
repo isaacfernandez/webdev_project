@@ -39,7 +39,7 @@ function findFeedFollowsForFeed(feedId) {
 }
 
 function findFeedFollowsOfFollower(followerId) {
-  return model.find({follower: followerId}).populate('feed');
+  return model.find({follower: followerId});
 }
 
 function findAllFeedFollows() {
