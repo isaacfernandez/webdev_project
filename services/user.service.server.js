@@ -9,7 +9,7 @@ module.exports = function (app) {
   app.post('/api/login', requireLoggedOut, login);
   app.post('/api/register', requireLoggedOut, register);
   app.get('/api/login/loggedIn', loggedIn);
-  app.put('/api/user', requireLoggedIn, updateUser); // just add more endpoints meh
+  app.put('/api/user/:userId', requireLoggedIn, updateUser); // just add more endpoints meh
   app.delete('/api/user/:userId', requireAdmin, deleteUser);
 
   var userModel = require('../models/user/user.model.server');
@@ -80,7 +80,7 @@ module.exports = function (app) {
 
   function updateUser(req, res) {
     var user = req.body;
-    userModel.updateUser(user, req.session['currentUser']._id)
+    userModel.updateUser(user, req.params['userId'])
       .then(function (response) {
         if (response.success === 1) {
           res.json(user);
