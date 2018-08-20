@@ -38,7 +38,7 @@ function deleteUserById(idToDelete) {
 }
 
 function updateUser(user, idToUpdate) {
-  return model.update({_id: idToUpdate}, {$set: user});
+  return model.findOneAndUpdate({_id: idToUpdate}, {$set: user}, {"new": true});
 }
 
 function addUserFollow(userId, userFollowId) {
