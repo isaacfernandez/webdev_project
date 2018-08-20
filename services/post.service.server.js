@@ -6,6 +6,7 @@ module.exports = function(app) {
   app.delete('/api/post/internal/:postId', requireModerator, deleteInternalPost);
   app.delete('/api/post/external/:postId', requireModerator, deleteExternalPost);
   app.get('/api/post/:postId', getPost);
+  app.get('/api/post/user/:userId', getPosts);
 
   var postModel = require('../models/post/post.model.server');
   var feedModel = require('../models/feed/feed.model.server');
@@ -70,6 +71,13 @@ module.exports = function(app) {
 
   function getPost(req, res) {
     postModel.findPostById(req.params['postId'])
+      .then(function(response) {
+        res.send(response);
+      });
+  }
+
+  function getPosts(req, res) {
+    postModel.findPostsByUser(req.params['userId'])
       .then(function(response) {
         res.send(response);
       });
