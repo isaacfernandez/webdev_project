@@ -5,7 +5,8 @@ var bodyParser = require('body-parser');
 
 app.use(function(req, res, next) {
   //res.header('Access-Control-Allow-Origin', 'https://cs4550-bk610-project-client.herokuapp.com');
-  res.header('Access-Control-Allow-Origin', 'http://localhost:4123');
+  //res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -22,6 +23,40 @@ app.use(session({
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost');
+
+
+requireModerator = function(req, res, next) {
+  if (req.session['currentUser'].role !== 'MODERATOR' &&
+      req.session['currentUser'].role !== 'ADMIN') {
+    res.send({'error': 'Moderator required'});
+  } else {
+    next();
+  }
+}
+
+requireLoggedOut = function(req, res, next) {
+  if (req.session['currentUser']) {
+    res.send({'error': 'Must not be logged in'});
+  } else {
+    next();
+  }
+}
+
+requireLoggedIn = function(req, res, next) {
+  if (!req.session['currentUser']) {
+    res.send({'error': 'User login required'});
+  } else {
+    next();
+  }
+}
+
+requireAdmin = function(req, res, next) {
+  if (req.session['currentUser'].role  !== 'ADMIN') {
+    res.send({'error': 'Admin required'});
+  } else {
+    next();
+  }
+}
 
 require('./services/post.service.server')(app);
 require('./services/feed.service.server')(app);

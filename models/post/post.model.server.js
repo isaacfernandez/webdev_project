@@ -10,7 +10,7 @@ var model = mongoose.model('PostModel', postSchema);
 
 
 function createPost(newPost) {
-  console.log('in createPost');
+  console.log('in createPost (postModel)');
   console.log(newPost);
   return model.create(newPost);
 }

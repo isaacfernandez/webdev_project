@@ -1,12 +1,13 @@
-
+ 
 module.exports = function(app) {
 
-  app.post('/api/feed/:feedId/follows/:userId', userFollowFeed);
+  app.post('/api/feed/:feedId/follows/:userId', requireLoggedIn, userFollowFeed);
   app.get('/api/feed/:feedId/follows/:quantity', getFeedFollowers);
+  app.get('/api/feed/:feedId/follows/count', getFeedFollowersCount);
   app.get('/api/user/:userId/feed-follows/:quantity', getFeedsFollowing);
   app.get('/api/feed/:feedId/isFollowing/:followerId', isUserFollowingFeed);
-  app.delete('/api/feed/:feedId/follows/:userId', deleteFeedFollow);
-  app.delete('/api/feed-follow/:feedFollowId', deleteFeedFollowById);
+  app.delete('/api/feed/:feedId/follows/:userId', requireLoggedIn, deleteFeedFollow);
+  app.delete('/api/feed-follow/:feedFollowId', requireLoggedIn, deleteFeedFollowById);
 
   var feedFollowModel = require('../models/feed-follow/feed-follow.model.server');
   var userModel = require('../models/user/user.model.server');
@@ -19,15 +20,25 @@ module.exports = function(app) {
     }
     feedFollowModel.createFeedFollow(newFollow)
       .then(function(feedFollow) {
-        userModel.addFeedFollow(req.params['userId'], feedFollow._id);
-        res.send(feedFollow);
+        return userModel.addFeedFollow(req.params['userId'], feedFollow._id);
+      }).then(function(response) {
+        res.send(response);
+      });
+  }
+
+  function getFeedFollowersCount(req, res) {
+    feedFollowModel.findFeedFollowsForFeed(req.params['feedId'])
+      .then(function(followers) {
+        console.log('followers in count');
+        console.log(followers);
+        res.send(followers.length);
       });
   }
 
   function getFeedFollowers(req, res) {
     feedFollowModel.findFeedFollowsForFeed(req.params['feedId'])
       .sort({'followingSince': -1})
-      .limit(req.params['quantity'])
+      .limit(parseInt(req.params['quantity']))
       .then(function(followers) {
         res.send(followers);
       });
@@ -36,7 +47,7 @@ module.exports = function(app) {
   function getFeedsFollowing(req, res) {
     feedFollowModel.findFeedFollowsOfFollower(req.params['userId'])
       .sort({'followingSince': -1})
-      .limit(req.params['quantity'])
+      .limit(parseInt(req.params['quantity']))
       .then(function(feeds) {
         res.send(feeds);
       });
@@ -47,10 +58,10 @@ module.exports = function(app) {
       req.params['feedId'],
       req.params['followerId'])
       .then(function(potentialFollow) {
-        if (potentialFollow !== null) {
-          res.json({'response': true});
+        if (potentialFollow._id !== undefined) {
+          res.send(potentialFollow);
         } else {
-          res.json({'response': false});
+          res.send({'error': 'not following feed'});
         }
       });
   }
@@ -60,12 +71,13 @@ module.exports = function(app) {
       req.params['feedId'],
       req.params['followerId'])
       .then(function(feedFollow) {
-        userModel.removeFeedFollowById(feedFollow.follower, feedFollow._id)
-      });
-    feedFollowModel.deleteFeedFollowByFeedAndFollower(
-      req.params['feedId'],
-      req.params['followerId'])
-      .then(function(response) {
+        return userModel.removeFeedFollowById(feedFollow.follower, feedFollow._id)
+          .then(function() {
+            return feedFollowModel.deleteFeedFollowByFeedAndFollower(
+              req.params['feedId'],
+              req.params['followerId']);
+          });
+      }).then(function(response) {
         res.send(response);
       });
   }
@@ -73,12 +85,13 @@ module.exports = function(app) {
   function deleteFeedFollowById(req, res) {
     feedFollowModel.findFeedFollowById(req.params['feedFollowId'])
       .then(function(feedFollow) {
-        userModel.removeFeedFollowById(
+        return userModel.removeFeedFollowById(
           feedFollow.follower,
           req.params['feedFollowId'])
-      });
-    feedFollowModel.deleteFeedFollowById(req.params['feedFollowId'])
-      .then(function(response) {
+          .then(function(feedFollow) {
+            return feedFollowModel.deleteFeedFollowById(req.params['feedFollowId'])
+          });
+      }).then(function(response) {
         res.send(response);
       });
   }

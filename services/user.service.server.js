@@ -2,14 +2,15 @@
 module.exports = function (app) {
   app.get('/api/user', findAllUsers);
   app.get('/api/user/id/:userId', findUserById);
+  app.get('/api/user/search/:string', searchForUsers);
   app.get('/api/user/name/:username', findUserByUsername);
   app.get('/api/profile', profile);
-  app.post('/api/logout', logout);
-  app.post('/api/login', login);
-  app.post('/api/register', register);
+  app.post('/api/logout', requireLoggedIn, logout);
+  app.post('/api/login', requireLoggedOut, login);
+  app.post('/api/register', requireLoggedOut, register);
   app.get('/api/login/loggedIn', loggedIn);
-  app.put('/api/user', updateUser); // just add more endpoints meh
-  app.delete('/api/user/:userId', deleteUser);
+  app.put('/api/user/:userId', requireLoggedIn, updateUser); // just add more endpoints meh
+  app.delete('/api/user/:userId', requireAdmin, deleteUser);
 
   var userModel = require('../models/user/user.model.server');
 
@@ -20,23 +21,23 @@ module.exports = function (app) {
       .then(function(user) {
         if (user !== null) {
           req.session['currentUser'] = user;
-          res.json(user);
+          res.send(user);
         } else {
-          res.sendStatus(404);
+          res.send({'error': 'credentials not found'});
         }
       })
   }
 
   function logout(req, res) {
     req.session.destroy();
-    res.send(200);
+    res.send({'success': 'logged out'});
   }
 
   function findUserById(req, res) {
     var id = req.params['userId'];
     userModel.findUserById(id)
       .then(function (user) {
-        res.json(user);
+        res.send(user);
       })
   }
 
@@ -44,13 +45,13 @@ module.exports = function (app) {
     var username = req.params['username'];
     userModel.findUserByUsername(username)
       .then(function (user) {
-        res.json(user);
+        res.send(user);
       })
   }
 
   function profile(req, res) {
     if (req.session['currentUser'] === undefined) {
-      res.send(403);
+      res.send({'error': 'not logged in'});
     } else {
       userModel.findUserById(req.session['currentUser']._id)
         .then(function(response) {
@@ -72,19 +73,19 @@ module.exports = function (app) {
               res.send(user);
             });
         } else {
-          res.sendStatus(404);
+          res.send({'error': 'username taken'});
         }
       });
   }
 
   function updateUser(req, res) {
     var user = req.body;
-    userModel.updateUser(user, req.session['currentUser']._id)
+    userModel.updateUser(user, req.params['userId'])
       .then(function (response) {
         if (response.success === 1) {
-          res.json(user);
+          res.send(user);
         } else {
-          res.sendStatus(404);
+          res.send({'error': 'failed to update user'});
         }
       });
   }
@@ -105,14 +106,23 @@ module.exports = function (app) {
 
   function loggedIn(req, res) {
     if (req.session['currentUser'] === undefined) {
-      res.sendStatus(404);
+      res.send({'error': 'not logged in'});
     } else {
-      res.sendStatus(200);
+      res.send(req.session['currentUser']);
     }
   }
 
-  function logout(req, res) {
-    req.session.destroy();
-    res.sendStatus(200);
+  function searchForUsers(req, res) {
+    userModel.findUsersByUsername(req.params['string'])
+      .then(function(users) {
+        res.send(users);
+      });
   }
 }
+
+
+
+
+
+
+

@@ -1,14 +1,14 @@
 
 
 
-
 module.exports = function(app) {
-  app.get('/api/feed/:quantity', getFeeds);
-  app.post('/api/feed', createFeed);
-  app.delete('/api/feed/:feedId', deleteFeed);
-  app.put('/api/feed/:feedId', updateFeed);
+  app.get('/api/feeds/:quantity', getFeeds);
+  app.get('/api/feed/:feedId', getFeed);
+  app.post('/api/feed', requireModerator, createFeed);
+  app.delete('/api/feed/:feedId', requireModerator, deleteFeed);
+  app.put('/api/feed/:feedId', requireModerator, updateFeed);
   app.get('/api/feed/:feedName/external/:quantity', getExternalPosts);
-  app.get('/api/feed/:feedId/internal/:quantity', getInternalPosts);
+  app.get('/api/feed/:feedName/internal/:quantity', getInternalPosts);
   app.get('/api/feed/search/:string', searchForFeeds);
 
   var fetch = require('node-fetch');
@@ -21,17 +21,26 @@ module.exports = function(app) {
   var externalFeeds = [
     'business', 'entertainment', 'health', 'science', 'sports', 'technology'
   ];
-  
+ 
+  function getFeed(req, res) {
+    feedModel.findFeedById(req.params['feedId'])
+      .then(function(feed) {
+        res.send(feed);
+      });
+  }
+ 
 
   function getFeeds(req, res) {
     feedModel.findAllFeeds()
       .then(function (feeds) {
         res.send(feeds);
-      })
+      });
   }
 
   function createFeed(req, res) {
     var keep_going;
+    console.log('in createFeed');
+    console.log(req.body);
     feedModel.findFeedByName(req.body.feedName)
       .then(function(response) {
         keep_going = response === null;
@@ -42,7 +51,7 @@ module.exports = function(app) {
               res.send(feed);
             });
         } else {
-          res.sendStatus(404);
+          res.send({'error': 'name already taken'});
         }
       });
   }
@@ -59,23 +68,24 @@ module.exports = function(app) {
     feedModel.updateFeed(req.params['feedId'], feed)
       .then(function(response) {
         if (response.success === 1) {
-          res.json(feed);
+          res.send(feed);
         } else {
-          res.sendStatus(404);
+          res.send({'error': 'failed to update'});
         }
       });
   }
 
   function getExternalPosts(req, res) {
+    var quantity = parseInt(req.params['quantity']);
     if (externalFeeds.indexOf(req.params['feedName']) > -1) {
       // It seems reasonable to not give the absolutely most up to date posts
       // and waiting for the promises to resolve is not an acceptable user
       // experience because of the newsapi.org query latency,
       // hence returning whatever the currently most up to date are.
-      feedModel.getExternalPosts(req.params['feedName'], req.params['quantity'])
+      feedModel.getExternalPosts(req.params['feedName'], quantity)
         .then(function(posts) {
           console.log('here');
-          posts = posts[0]['externalPosts'].slice(0, req.params['quantity']);
+          posts = posts[0]['externalPosts'].slice(0, quantity);
           res.send(posts);
         });
       // now update the DB so it mirror what our external API would show
@@ -83,7 +93,7 @@ module.exports = function(app) {
         .then((feedObj) => {
           console.log('in thing');
           fetch(queryURL + req.params['feedName'])
-            .then((response) => response.json())
+            .then((response) => response.json())//res.send(response))
             .then(function(arts) {
               articles = arts.articles;
               articles.forEach(function(article) {
@@ -112,18 +122,18 @@ module.exports = function(app) {
   }
 
   function getInternalPosts(req, res) {
-    feedModel.getInternalPosts(req.params['feedId'], req.params['quantity'])
+    var quantity = parseInt(req.params['quantity']);
+    feedModel.getInternalPosts(req.params['feedName'], quantity)
       .then(function(posts) {
-        posts = posts[0]['internalPosts'].slice(0, req.params['quantity']);
+        posts = posts[0]['internalPosts'].slice(0, quantity);
         res.send(posts);
       });
   }
 
   function searchForFeeds(req, res) {
-    feedModel.find({'feedName':
-      {'$regex': req.params['string'], '$options': 'i'}})
+    feedModel.findFeedsByName(req.params['string'])
       .then(function(feeds) {
-        res.send(feeds);
+         res.send(feeds);
       });
   }
 

@@ -10,7 +10,16 @@ module.exports = mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  role: {
+    type: String,
+    enum: ['ADMIN', 'MODERATOR', 'USER'], // a USER is a creator and a follower
+    default: 'USER'
+  },
   userFollows: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user-follow'
+  }],
+  userFollowers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user-follow'
   }],

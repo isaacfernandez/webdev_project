@@ -26,6 +26,10 @@ function findFeedByName(feedName) {
   return model.findOne({feedName: feedName});
 }
 
+function findFeedsByName(stringMatch) {
+  return model.find({'feedName': {'$regex': stringMatch, '$options': 'i'}})
+}
+
 function findFeedById(idToFind) {
   return model.findById(idToFind);
 }
@@ -34,8 +38,8 @@ function findAllFeeds() {
   return model.find();
 }
 
-function getInternalPosts(feedId, quantity) {
-  return model.findById({feedId: feedId}).select({'internalPosts': 1});
+function getInternalPosts(feedName, quantity) {
+  return model.find({feedName: feedName}).select({'internalPosts': 1});
 }
 
 function getExternalPosts(feedName, quantity) {
@@ -43,11 +47,20 @@ function getExternalPosts(feedName, quantity) {
 }
 
 function addInternalPost(feedId, postId) {
-  return model.update({_id: feedId}, {$push: {internalPosts: postId}});
+  console.log('addInternalPost (feedModel)');
+  return model.update({_id: feedId}, {$push: {internalPosts: postId}}, function(error){});
 }
 
 function addExternalPost(feedId, postId) {
   return model.update({_id: feedId}, {$push: {externalPosts: postId}}, function(error){console.log(error)});
+}
+
+function removeInternalPost(feedId, postId) {
+  return model.update({_id: feedId}, {$pull: {internalPosts: postId}}, function(error){});
+}
+
+function removeExternalPost(feedId, postId) {
+  return model.update({_id: feedId}, {$pull: {externalPosts: postId}}, function(error){});
 }
 
 function addFeedFollow(feedId, followId) {
@@ -60,12 +73,15 @@ module.exports = {
   updateFeed: updateFeed,
   deleteFeedById: deleteFeedById,
   findFeedByName: findFeedByName,
+  findFeedsByName: findFeedsByName,
   findFeedById: findFeedById,
   findAllFeeds: findAllFeeds,
   getInternalPosts: getInternalPosts,
   getExternalPosts: getExternalPosts,
   addInternalPost: addInternalPost,
   addExternalPost: addExternalPost,
+  removeInternalPost: removeInternalPost,
+  removeExternalPost: removeExternalPost,
   addFeedFollow: addFeedFollow
 };
 

@@ -21,6 +21,10 @@ function findUserById(idToFind) {
   return model.findById(idToFind);
 }
 
+function findUsersByUsername(stringMatch) {
+  return model.find({'username': {'$regex': stringMatch, '$options': 'i'}});
+}
+
 function createUser(newUser) {
   return model.create(newUser);
 }
@@ -34,11 +38,25 @@ function deleteUserById(idToDelete) {
 }
 
 function updateUser(user, idToUpdate) {
-  return model.update({_id: idToUpdate}, {$set: user});
+  return model.findOneAndUpdate({_id: idToUpdate}, {$set: user}, {"new": true});
 }
 
 function addUserFollow(userId, userFollowId) {
+  console.log('in addUserFollow');
   return model.update({_id: userId}, {$push: {userFollows: userFollowId}});
+}
+
+function addUserFollower(userId, userFollowerId) {
+  console.log('in addUserFollower');
+  return model.update({_id: userId}, {$push: {userFollowers: userFollowerId}});
+}
+
+function removeUserFollow(userId, userFollowId) {
+  return model.update({_id: userId}, {$pull: {userFollows: userFollowId}});
+}
+
+function removeUserFollower(userId, userFollowerId) {
+  return model.update({_id: userId}, {$pull: {userFollowers: userFollowerId}});
 }
 
 function addFeedFollow(userId, feedFollowId) {
@@ -49,20 +67,31 @@ function removeFeedFollowById(userId, feedFollowId) {
   return model.update({_id: userId}, {$pull: {feedFollows: feedFollowId}});
 }
 
-function addPost(userId, postId) {
-  return model.update({_id: userId}, {$push: {posts: post}});
+function addPostToUser(userId, postId) {
+  console.log('in addPostToUser (userModel)');
+  return model.update({_id: userId}, {$push: {posts: postId}}, function(error){console.log(error);});
+}
+
+function removePostFromUser(userId, postId) {
+  return model.update({_id: userId}, {$pull: {posts: postId}}, function(error){console.log(error);});
 }
 
 module.exports = {
   findUserByCredentials: findUserByCredentials,
   findUserByUsername: findUserByUsername,
+  findUsersByUsername: findUsersByUsername,
   findUserById: findUserById,
   createUser: createUser,
   findAllUsers: findAllUsers,
   deleteUserById: deleteUserById,
   updateUser: updateUser,
   addUserFollow: addUserFollow,
+  addUserFollower: addUserFollower,
+  removeUserFollow: removeUserFollow,
+  removeUserFollower: removeUserFollower,
   addFeedFollow: addFeedFollow,
   removeFeedFollowById: removeFeedFollowById,
-  addPost: addPost
+  addPostToUser: addPostToUser,
+  removePostFromUser: removePostFromUser
 };
+
