@@ -39,7 +39,7 @@ function findAllFeeds() {
 }
 
 function getInternalPosts(feedName, quantity) {
-  return model.findById({feedName: feedName}).select({'internalPosts': 1});
+  return model.find({feedName: feedName}).select({'internalPosts': 1});
 }
 
 function getExternalPosts(feedName, quantity) {
