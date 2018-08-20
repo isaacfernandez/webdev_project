@@ -2,6 +2,7 @@
 module.exports = function(app) {
 
   app.post('/api/user/:userId/follows/:followedId', requireLoggedIn, followUser);
+  app.get('/api/follow/:followId', getFollow);
   app.get('/api/user/:userId/follows/:quantity', getFollows);
   app.get('/api/user/:userId/follower/:quantity', getFollowers);
   app.get('/api/user/:userId/isFollowing/:followingId', isFollowing);
@@ -11,6 +12,14 @@ module.exports = function(app) {
   var userFollowModel = require('../models/user-follow/user-follow.model.server');
   var userModel = require('../models/user/user.model.server');
   // schema: follower, followed, followingSince
+
+
+  function getFollow(req, res) {
+    userFollowModel.findUserFollowById(req.params['userId'])
+      .then(function(follow) {
+        res.send(follow);
+      });
+  }
 
   function followUser(req, res) {
     newFollow = {
