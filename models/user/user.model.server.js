@@ -69,8 +69,8 @@ function removeFeedFollowById(userId, feedFollowId) {
 
 function addPostToUser(userId, postId) {
   console.log('in addPostToUser (userModel)');
-  return model.update(
-    {_id: userId},
+  return model.findByIdAndUpdate(
+    userId,
     {$push: {posts: postId}},
     function(error, success){
       if (error) {
