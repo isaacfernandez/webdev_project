@@ -58,7 +58,7 @@ module.exports = function(app) {
       req.params['feedId'],
       req.params['followerId'])
       .then(function(potentialFollow) {
-        if (potentialFollow !== null) {
+        if (potentialFollow._id !== undefined) {
           res.send(potentialFollow);
         } else {
           res.send({'error': 'not following feed'});
