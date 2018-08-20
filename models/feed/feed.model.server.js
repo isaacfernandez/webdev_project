@@ -47,7 +47,7 @@ function getExternalPosts(feedName, quantity) {
 }
 
 function addInternalPost(feedId, postId) {
-  console.log('addInternalPost');
+  console.log('addInternalPost (feedModel)');
   return model.update({_id: feedId}, {$push: {internalPosts: postId}}, function(error){});
 }
 

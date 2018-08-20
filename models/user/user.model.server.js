@@ -67,12 +67,12 @@ function removeFeedFollowById(userId, feedFollowId) {
   return model.update({_id: userId}, {$pull: {feedFollows: feedFollowId}});
 }
 
-function addPost(userId, postId) {
-  console.log('in addPost');
+function addPostToUser(userId, postId) {
+  console.log('in addPostToUser (userModel)');
   return model.update({_id: userId}, {$push: {posts: postId}}, function(error){console.log(error);});
 }
 
-function removePost(userId, postId) {
+function removePostfromUser(userId, postId) {
   return model.update({_id: userId}, {$pull: {posts: postId}}, function(error){console.log(error);});
 }
 

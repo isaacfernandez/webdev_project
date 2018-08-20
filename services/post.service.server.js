@@ -22,7 +22,7 @@ module.exports = function(app) {
     }).then(function(post) {
       return feedModel.addInternalPost(req.params['feedId'], post._id)
         .then(function(post) {
-          return userModel.addPost(post.postingUser, post._id)
+          return userModel.addPostToUser(post.postingUser, post._id)
         });
     }).then(function(response) {
       res.send(response);
@@ -44,7 +44,7 @@ module.exports = function(app) {
           .then(function(response) {
              return feedModel.removeInternalPost(post.feed, post._id)
                .then(function(response) {
-                 userModel.removePost(post.postingUser, post._id);
+                 userModel.removePostFromUser(post.postingUser, post._id);
                });
           });
       }).then(function(response) {
@@ -59,7 +59,7 @@ module.exports = function(app) {
           .then(function(response) {
              return feedModel.removeExternalPost(post.feed, post._id)
                .then(function(response) {
-                 userModel.removePost(post.postingUser, post._id);
+                 userModel.removePostFromUser(post.postingUser, post._id);
                });
           });
       }).then(function(response) {
