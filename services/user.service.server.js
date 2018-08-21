@@ -82,11 +82,7 @@ module.exports = function (app) {
     var user = req.body;
     userModel.updateUser(user, req.params['userId'])
       .then(function (response) {
-        if (response.success === 1) {
-          res.send(user);
-        } else {
-          res.send({'error': 'failed to update user'});
-        }
+        res.send(response);
       });
   }
 
