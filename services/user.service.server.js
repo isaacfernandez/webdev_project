@@ -8,6 +8,7 @@ module.exports = function (app) {
   app.post('/api/logout', requireLoggedIn, logout);
   app.post('/api/login', requireLoggedOut, login);
   app.post('/api/register', requireLoggedOut, register);
+  app.post('/api/user/createUser', requireAdmin, createUser);
   app.get('/api/login/loggedIn', loggedIn);
   app.put('/api/user/:userId', requireLoggedIn, updateUser); // just add more endpoints meh
   app.delete('/api/user/:userId', requireAdmin, deleteUser);
@@ -58,6 +59,23 @@ module.exports = function (app) {
           res.send(response);
         });
     }
+  }
+
+  function createUser(req, res) {
+    var keep_going;
+    userModel.findUserByUsername(req.body['username'])
+      .then(function(response) {
+        keep_going = response === null;
+      }).then(function() {
+        if (keep_going) {
+          userModel.createUser(req.body)
+            .then(function(user) {
+              res.send(user);
+            });
+        } else {
+          res.send({'error': 'username taken'});
+        }
+      });
   }
 
   function register(req, res) {
